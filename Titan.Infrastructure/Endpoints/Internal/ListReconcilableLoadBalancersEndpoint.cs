@@ -1,0 +1,43 @@
+using FastEndpoints;
+using Microsoft.Extensions.Configuration;
+using Titan.Application.Queries.Compute.LoadBalancer;
+using Titan.Application.Queries.Compute.LoadBalancer.Contracts;
+using Titan.Infrastructure.Hosting;
+
+namespace Titan.Infrastructure.Endpoints.Internal;
+
+// Load balancers of a zone, matched against what Incus holds. Same shape as ListReconcilableNetworksEndpoint,
+// including the heartbeat.
+public class ListReconcilableLoadBalancersEndpoint(
+    ListReconcilableLoadBalancersQueryHandler handler,
+    ReconcilerHeartbeat heartbeat,
+    IConfiguration config)
+    : EndpointWithoutRequest<List<ReconcilableLoadBalancerQueryResult>>
+{
+    public override void Configure()
+    {
+        Get("internal/reconcile/load-balancers");
+        AllowAnonymous();
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var token = HttpContext.Request.Headers["X-Internal-Token"].FirstOrDefault();
+        if (!InternalTokenAuth.Matches(token, config["Internal:Token"]))
+        {
+            await SendUnauthorizedAsync(ct);
+            return;
+        }
+
+        string? zoneId = Query<string>("zoneId", isRequired: false);
+        if (string.IsNullOrEmpty(zoneId))
+        {
+            await SendErrorsAsync(400, ct);
+            return;
+        }
+
+        var rows = await handler.HandleAsync(new ListReconcilableLoadBalancersQuery(zoneId), ct);
+        heartbeat.RecordPoll(ReconcilerHeartbeat.KeyFor(ReconcilerHeartbeat.LoadBalancerKind, zoneId), DateTimeOffset.UtcNow);
+        await SendAsync(rows, cancellation: ct);
+    }
+}

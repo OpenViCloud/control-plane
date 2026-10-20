@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Titan.Host/Titan.Host.csproj" />
+  <Project Path="Titan.Application/Titan.Application.csproj" />
+  <Project Path="Titan.Domain/Titan.Domain.csproj" />
+  <Project Path="Titan.Infrastructure/Titan.Infrastructure.csproj" />
+  <Project Path="Titan.Tests/Titan.Tests.csproj" />
+</Solution>

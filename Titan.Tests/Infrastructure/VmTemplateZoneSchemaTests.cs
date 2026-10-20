@@ -1,0 +1,60 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Titan.Domain.Aggregates.Catalog.VmTemplate;
+using Titan.Infrastructure.Persistence;
+
+namespace Titan.Tests.Infrastructure;
+
+// "One sync state per template per zone" (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone) is the primary key of
+// vm_template_zones, not application code. The InMemory provider does not enforce keys the way Postgres does, so this
+// pins the model metadata the migration builds the table from.
+public class VmTemplateZoneSchemaTests
+{
+    private static IModel Model()
+    {
+        var options = new DbContextOptionsBuilder<TitanDbContext>()
+            .UseInMemoryDatabase($"schema-{Guid.NewGuid()}")
+            .Options;
+        using var db = new TitanDbContext(options);
+        return db.Model;
+    }
+
+    [Fact]
+    public void MappedToVmTemplateZonesTable()
+    {
+        Assert.Equal("vm_template_zones", Model().FindEntityType(typeof(VmTemplateZone))!.GetTableName());
+    }
+
+    [Fact] // a single-column key would let one template hold two states for a zone, or one state for two templates
+    public void PrimaryKey_IsTheTemplateAndTheZone()
+    {
+        var key = Model().FindEntityType(typeof(VmTemplateZone))!.FindPrimaryKey()!;
+
+        Assert.Equal(
+            [nameof(VmTemplateZone.TemplateId), nameof(VmTemplateZone.ZoneId)],
+            key.Properties.Select(p => p.Name));
+    }
+
+    [Fact] // the zone rows belong to their template: deleting a template takes its sync states with it
+    public void BelongsToItsTemplate_DeletedWithIt()
+    {
+        var foreignKey = Model().FindEntityType(typeof(VmTemplateZone))!.GetForeignKeys().Single();
+
+        Assert.Equal(typeof(VmTemplate), foreignKey.PrincipalEntityType.ClrType);
+        Assert.Equal([nameof(VmTemplateZone.TemplateId)], foreignKey.Properties.Select(p => p.Name));
+        Assert.Equal(DeleteBehavior.Cascade, foreignKey.DeleteBehavior);
+    }
+
+    [Theory] // the state moved into the zone rows: a column left on vm_templates would be a second, stale answer
+    [InlineData("current_state")]
+    [InlineData("desired_state")]
+    [InlineData("pending_intent_id")]
+    [InlineData("current_state_reason")]
+    [InlineData("external_template_id")]
+    public void VmTemplates_NoLongerHoldsAnySyncState(string column)
+    {
+        var template = Model().FindEntityType(typeof(VmTemplate))!;
+
+        Assert.DoesNotContain(column, template.GetProperties().Select(p => p.GetColumnName()));
+    }
+}

@@ -1,0 +1,28 @@
+using Titan.Domain.Aggregates.Networking.Network;
+using Titan.Domain.Exceptions;
+using Titan.Domain.Repositories.Networking;
+using NetworkAggregate = Titan.Domain.Aggregates.Networking.Network.Network;
+
+namespace Titan.Application.Services.Networking.Network;
+
+/// <summary>
+/// The one place Networking decides whether a caller may see a network.
+///
+/// A foreign network answers <b>404</b>, exactly like a missing one — never 403, which would confirm
+/// to a caller that a resource they cannot see exists (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/http-contract.md#tenant-scoping).
+/// NetworkServiceTests.Get_NetworkBelongsToOtherTenant_ThrowsNotFoundException pins it.
+/// </summary>
+public static class NetworkOwnership
+{
+    public static async Task<NetworkAggregate> RequireNetworkAsync(
+        INetworkRepository repo, Guid tenantId, Guid networkId, CancellationToken ct)
+    {
+        var network = await repo.FindByIdAsync(networkId, ct)
+            ?? throw new NotFoundException("NETWORK_NOT_FOUND", "Network not found.");
+
+        if (network.TenantId != tenantId)
+            throw new NotFoundException("NETWORK_NOT_FOUND", "Network not found.");
+
+        return network;
+    }
+}
