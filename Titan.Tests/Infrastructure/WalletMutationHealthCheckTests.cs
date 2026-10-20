@@ -234,7 +234,7 @@ public class WalletMutationHealthThresholdTests
     [Fact]
     public void Pending_threshold_is_not_set_to_the_fast_path_SLO()
     {
-        // https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#single-writer-outbox's ~5-10s SLO describes the bus notify path. Using it here is the specific mistake
+        // The ~5-10s SLO of https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#single-writer-outbox describes the bus notify path. Using it here is the specific mistake
         // this test exists to catch: it would alert on every sweeper-recovered mutation.
         Assert.True(WalletMutationHealthCheck.PendingThresholdSeconds > 10);
     }

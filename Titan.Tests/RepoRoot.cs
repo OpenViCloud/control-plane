@@ -1,7 +1,7 @@
 namespace Titan.Tests;
 
 // Tests that read source files need the checkout on disk, and the test binary runs from
-// bin/Debug/net9.0, so these walk up from there.
+// bin/<configuration>/net9.0, so this walks up from there.
 internal static class RepoRoot
 {
     public static string ControlPlane { get; } = Find("Titan.Domain");

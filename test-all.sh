@@ -4,7 +4,7 @@
 # WHY THIS EXISTS (HOUSE-01, 2026-09-07): a bare `dotnet test` reports 6 FAILURES here, and none of
 # them is a regression. WebApplicationFactory and FastEndpoints.Factory.Create both mutate the same
 # global `FastEndpoints.Config.ServiceResolver`; sharing one parallel pool lets a Factory.Create test
-# read a provider a full-host test already disposed (ObjectDisposedException). ci-control-plane.yml
+# read a provider a full-host test already disposed (ObjectDisposedException). .github/workflows/ci.yml
 # has split these into separate steps since 2026-08-28 — this script is the same split, locally, so
 # "green" means the same thing on both sides of the fence.
 #
