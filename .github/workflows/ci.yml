@@ -2,7 +2,7 @@ name: CI
 
 # Tests in three processes (unit, full host, integration), the Incus lab recordings matching the incus-worker commit
 # they name (Titan.Tests/Infrastructure/Incus/testdata/SOURCE, synced by scripts/sync-incus-testdata.sh), the worker
-# routing every command kind this commit enqueues, and the image build.
+# routing every command kind this commit enqueues, and the image, pushed only from main.
 on:
   push:
     branches: [main]
@@ -108,19 +108,36 @@ jobs:
           go test -count=1 -run '^TestRoutes_CoverTheControlPlanesKinds$' -v . | tee ../routes.log
           grep -q '^--- PASS: TestRoutes_CoverTheControlPlanesKinds' ../routes.log
 
-  # Built on every run, pushed by nothing yet: titan still builds and deploys the control plane.
+  # Built on every run; pushed only from main, once the tests passed, tagged with the commit's first 7 characters.
+  # Titan pulls the tag into dev (scripts/pull-images.py there); this repository holds no credential for titan
+  # (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/platform-infra.md#gitops-flow).
   image:
     name: Image build
     runs-on: ubuntu-latest
     needs: [test, worker-kinds]
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
       - uses: docker/setup-buildx-action@v3
 
-      - name: Build
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build, and push from main
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/arm64
-          push: false
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/openvicloud/control-plane:${{ env.SHORT_SHA }}
