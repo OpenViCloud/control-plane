@@ -1,0 +1,39 @@
+name: CI — API contract
+
+# A Terraform provider or CLI already on a customer's machine was generated from an older copy of
+# api/openapi-v1.json, so a PR may add to /v1 but never break it
+# (https://github.com/OpenViCloud/titan/blob/main/docs/features/public-api/design.md#spec-breaking-gate).
+# --fail-on WARN, not ERR: response properties are not declared required, so removing one is only a
+# warning. api/breaking-change-levels.txt lowers the rules a client must tolerate (a new value in a
+# state enum) to INFO.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'api/**'
+      - '.github/workflows/ci-api.yml'
+
+jobs:
+  breaking:
+    name: Spec does not break /v1
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: false
+
+      - name: Spec does not break /v1
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git show "origin/${BASE_REF}:api/openapi-v1.json" > "$RUNNER_TEMP/base-openapi-v1.json"
+          go run github.com/oasdiff/oasdiff@v1.11.7 breaking \
+            "$RUNNER_TEMP/base-openapi-v1.json" api/openapi-v1.json \
+            --fail-on WARN \
+            --severity-levels api/breaking-change-levels.txt

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repo này
 
-`OpenViCloud/control-plane` là control plane của Titan (ASP.NET Core 9): REST API `/v1`, identity, tenancy, quota, billing, ví, và bảng lệnh `core.provider_commands` mà [`incus-worker`](https://github.com/OpenViCloud/incus-worker) lease qua `/internal`. Repo này chỉ chứa code, test, `api/openapi-v1.json` và CI của control plane. Gate "không phá `/v1`" (`ci-api.yml`) tạm còn chạy ở titan.
+`OpenViCloud/control-plane` là control plane của Titan (ASP.NET Core 9): REST API `/v1`, identity, tenancy, quota, billing, ví, và bảng lệnh `core.provider_commands` mà [`incus-worker`](https://github.com/OpenViCloud/incus-worker) lease qua `/internal`. Repo này chỉ chứa code, test, `api/openapi-v1.json` và CI của control plane. Gate "không phá `/v1`" là `.github/workflows/ci-api.yml`; repo CLI, provider và frontend chép spec từ repo này (`scripts/sync-spec.sh <sha>` của từng repo).
 
 Doc ở lại repo [`OpenViCloud/titan`](https://github.com/OpenViCloud/titan): luật kiến trúc (`docs/architecture/`), design + user story từng feature (`docs/features/`), hạ tầng, iteration, release, gitops và quy trình (skill `.claude/commands/`). Mọi link `docs/…` trong comment và trong file này là URL vào `main` của titan. Ngoại lệ: 43 đường dẫn `docs/…` nằm trong **chuỗi** (thông điệp assert của guard, thông điệp health check và log, văn bản pháp lý `LegalDocumentCatalog`) giữ nguyên chữ, là đường dẫn trong repo titan — đổi chuỗi là đổi hành vi (văn bản pháp lý đổi thì phải tăng `Version`). Iteration và release chạy từ phiên ở titan.
 
