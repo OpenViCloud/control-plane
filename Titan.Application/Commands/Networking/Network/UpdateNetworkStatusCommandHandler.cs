@@ -1,0 +1,135 @@
+using Titan.Application.Abstractions;
+using Titan.Application.Commands.Networking.Network.Contracts;
+using Titan.Application.Services.Networking.FirewallRule;
+using Titan.Domain.Aggregates.Networking.Network;
+using Titan.Domain.Exceptions;
+using Titan.Domain.Repositories.Networking;
+using FirewallRuleAggregate = Titan.Domain.Aggregates.Networking.FirewallRule.FirewallRule;
+
+namespace Titan.Application.Commands.Networking.Network;
+
+// Worker callback — an observation of Incus (docs/architecture/intent-and-observation.md#intent-versus-observation:
+// observation converges). The create and delete commands report here when they finish, the network reconciler every
+// cycle. Outcomes are recorded once: the aggregate says whether a report fulfilled the waiting request
+// (docs/features/activity/design.md#outcome-source).
+public class UpdateNetworkStatusCommandHandler(
+    INetworkRepository repo,
+    IFirewallRuleRepository firewallRepo,
+    IActivityRecorder activity)
+{
+    public async Task HandleAsync(UpdateNetworkStatusCommand command, CancellationToken ct = default)
+    {
+        var req = command;   // the command IS the callback payload (docs/architecture/code-structure.md#contracts)
+
+        // Parsed before the network is loaded: a malformed report is the worker's bug, whatever the network.
+        NetworkStatus? observedStatus = null;
+        switch (req.Report)
+        {
+            case "Observed":
+                if (req.Exists == null)
+                {
+                    throw new BadRequestException("INVALID_STATUS", "Exists is required when report is Observed.");
+                }
+                if (req.Exists == true)
+                {
+                    observedStatus = ParseIncusStatus(req.Status);
+                }
+                break;
+            case "Created":
+                if (string.IsNullOrEmpty(req.ExternalId))
+                {
+                    throw new BadRequestException("INVALID_STATUS", "ExternalId is required when report is Created.");
+                }
+                break;
+            case "RequestFailed":
+            case "Deleted":
+                break;
+            default:
+                throw new BadRequestException("INVALID_STATUS", $"Unknown network report: '{req.Report}'");
+        }
+
+        var network = await repo.FindByIdAsync(req.NetworkId, ct)
+            ?? throw new NotFoundException("NETWORK_NOT_FOUND", "Network not found.");
+
+        string? outcome = null;
+        switch (req.Report)
+        {
+            case "Observed":
+                if (observedStatus == null)
+                {
+                    network.MarkNotFound();
+                }
+                else
+                {
+                    bool createdNow = network.MarkObserved(observedStatus.Value);
+                    if (createdNow)
+                    {
+                        outcome = "network.created";
+                    }
+                }
+                break;
+            case "Created":
+                network.MarkCreated(req.ExternalId!, req.Cidr ?? "", req.Gateway ?? "");
+                break;
+            case "RequestFailed":
+                // A give-up report carries the provider id when the Created report never arrived.
+                bool carriesAnIdNotYetStored = !string.IsNullOrEmpty(req.ExternalId) && network.ExternalId == null;
+                if (carriesAnIdNotYetStored)
+                {
+                    network.MarkCreated(req.ExternalId!, req.Cidr ?? "", req.Gateway ?? "");
+                }
+                // A delete Incus refused gives the network back (docs/architecture/desired-and-current.md#abandoned-request).
+                bool deleteWasWaiting = network.Transition == NetworkTransition.Deleting;
+                if (deleteWasWaiting)
+                {
+                    network.AbandonRequest(req.Reason, req.Detail);
+                }
+                else
+                {
+                    network.MarkRequestFailed(req.Reason, req.Detail);
+                }
+                break;
+            case "Deleted":
+                bool deletedNow = network.MarkDeleted();
+                if (deletedNow)
+                {
+                    outcome = "network.deleted";
+                }
+                // The delete command removed the network's ACL, and every rule in it
+                // (docs/features/network/design.md#network-lifecycle). A rule whose own delete was waiting is done
+                // here: its own delete command will only find it already Deleted, so its outcome is recorded now.
+                List<FirewallRuleAggregate> rules = await firewallRepo.ListLiveOfNetworkForUpdateAsync(network.Id, ct);
+                foreach (FirewallRuleAggregate rule in rules)
+                {
+                    bool ruleDeleteFulfilled = rule.MarkDeleted();
+                    if (ruleDeleteFulfilled)
+                    {
+                        activity.StageOutcome(rule.TenantId, "firewall_rule.deleted", "firewall_rule", rule.Id,
+                            FirewallRuleLabel.Describe(rule));
+                    }
+                }
+                break;
+        }
+
+        if (outcome != null)
+        {
+            activity.StageOutcome(network.TenantId, outcome, "network", network.Id, network.Name);
+        }
+
+        await repo.SaveAsync(ct);
+    }
+
+    // The worker sends the Incus status word for word (docs/architecture/desired-and-current.md#provider-state-is-verbatim).
+    // Matched by name, exactly: Enum.TryParse would also take "1" or "created".
+    private static NetworkStatus ParseIncusStatus(string? status)
+    {
+        foreach (NetworkStatus known in Enum.GetValues<NetworkStatus>())
+        {
+            if (known.ToString() == status)
+            {
+                return known;
+            }
+        }
+        throw new BadRequestException("INVALID_STATUS", $"Unknown network status: '{status}'");
+    }
+}

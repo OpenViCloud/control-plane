@@ -1,0 +1,15 @@
+using Titan.Application.Queries.Networking.Network.Contracts;
+using Titan.Domain.Repositories.Networking;
+
+namespace Titan.Application.Queries.Networking.Network;
+
+// Read side of the network reconciler (docs/architecture/desired-and-current.md#desired-and-current). No
+// ICurrentUser: the reconciler acts for no tenant; the endpoint authenticates it by X-Internal-Token.
+public class ListReconcilableNetworksQueryHandler(INetworkRepository repo)
+{
+    public async Task<List<ReconcilableNetworkQueryResult>> HandleAsync(ListReconcilableNetworksQuery query, CancellationToken ct = default)
+    {
+        var networks = await repo.ListReconcilableAsync(query.ZoneId, ct);
+        return networks.Select(ReconcilableNetworkQueryResult.From).ToList();
+    }
+}
