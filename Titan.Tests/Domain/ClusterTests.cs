@@ -3,7 +3,7 @@ using Titan.Domain.Aggregates.Platform.Cluster;
 namespace Titan.Tests.Domain;
 
 // An Incus cluster is reached at an https endpoint whose server certificate Titan pins by SHA-256 fingerprint
-// (docs/features/cluster/design.md#cluster-incus). The fingerprint is compared byte for byte at every
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus). The fingerprint is compared byte for byte at every
 // handshake, so it is stored in one canonical form however the admin pasted it.
 public class ClusterTests
 {

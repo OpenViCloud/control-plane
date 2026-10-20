@@ -26,7 +26,7 @@ public class VmTemplateConfiguration : IEntityTypeConfiguration<VmTemplate>
         // No soft-delete filter, unlike Network: templates are never soft-deleted.
         builder.HasIndex(t => t.Name).IsUnique().HasDatabaseName("UX_vm_templates_name");
 
-        // docs/features/catalog/design.md#template-borrows-sizing. Restrict, not Cascade: deleting a tier that
+        // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-borrows-sizing. Restrict, not Cascade: deleting a tier that
         // templates still point at must fail loudly, not quietly take rows of the OS catalog with it.
         builder.HasOne<VmOffering>()
             .WithMany()
@@ -34,7 +34,7 @@ public class VmTemplateConfiguration : IEntityTypeConfiguration<VmTemplate>
             .HasConstraintName("FK_vm_templates_vm_offerings_vm_offering_id")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // docs/features/catalog/design.md#template-per-zone. The sync state of each zone is a child row.
+        // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone. The sync state of each zone is a child row.
         builder.HasMany(t => t.Zones)
             .WithOne()
             .HasForeignKey(z => z.TemplateId)
@@ -44,16 +44,16 @@ public class VmTemplateConfiguration : IEntityTypeConfiguration<VmTemplate>
         SeedTemplates(builder);
     }
 
-    // docs/features/catalog/design.md#template-seed-in-migration. HasData needs constant keys and values:
+    // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-seed-in-migration. HasData needs constant keys and values:
     // Guid.NewGuid()/UtcNow would churn the migration on every build.
     private static void SeedTemplates(EntityTypeBuilder<VmTemplate> builder)
     {
         var ts = new DateTimeOffset(2026, 7, 1, 0, 0, 0, TimeSpan.Zero);
 
         // ImageUrl is the distro's own image the worker imports; without it the worker pulls OsImageName from the image
-        // server (docs/features/catalog/design.md#template-is-an-image-alias). Not listed ⇒ customers neither see nor
-        // pick it (docs/features/catalog/design.md#template-listed). Every row points at a tier Titan sells. Deleted seed rows leave their template on the provider:
-        // template sync is add-only (docs/features/catalog/design.md#template-sync-add-only).
+        // server (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-is-an-image-alias). Not listed ⇒ customers neither see nor
+        // pick it (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-listed). Every row points at a tier Titan sells. Deleted seed rows leave their template on the provider:
+        // template sync is add-only (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-sync-add-only).
         builder.HasData(
             Row("0a5e0000-0000-4000-8000-000000000002", "Ubuntu-22.04-Standard", "Ubuntu 22.04 LTS general purpose", "ubuntu/22.04",
                 UbuntuJammyImage, true, 25, "m", ts),
@@ -95,7 +95,7 @@ public class VmTemplateZoneConfiguration : IEntityTypeConfiguration<VmTemplateZo
         builder.HasKey(z => new { z.TemplateId, z.ZoneId });
         builder.Property(z => z.TemplateId).HasColumnName("template_id");
         builder.Property(z => z.ZoneId).HasColumnName("zone_id").HasColumnType("text");
-        // Incus has no status word for an image alias: existence only (docs/features/catalog/design.md#template-state-is-existence).
+        // Incus has no status word for an image alias: existence only (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-state-is-existence).
         builder.Property(z => z.CurrentExistence).HasColumnName("current_existence").HasConversion<string>().IsRequired();
         builder.Property(z => z.DesiredExistence).HasColumnName("desired_existence").HasConversion<string>().IsRequired();
         builder.Property(z => z.PendingIntentId).HasColumnName("pending_intent_id");

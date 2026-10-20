@@ -4,8 +4,8 @@ using Titan.Domain.Values;
 
 namespace Titan.Tests.Domain;
 
-// A rule's state is the Incus ACL rule state word for word (docs/architecture/desired-and-current.md#provider-state-is-verbatim),
-// with the existence axis beside it (docs/features/network/design.md#firewall-rule-status).
+// A rule's state is the Incus ACL rule state word for word (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/desired-and-current.md#provider-state-is-verbatim),
+// with the existence axis beside it (https://github.com/OpenViCloud/titan/blob/main/docs/features/network/design.md#firewall-rule-status).
 public class FirewallRuleLifecycleTests
 {
     [Fact]
@@ -76,7 +76,7 @@ public class FirewallRuleLifecycleTests
         Assert.Equal(FirewallRuleTransition.Deleting, rule.Transition);
     }
 
-    // ── Not found: the reconciler never reports Deleted (docs/architecture/desired-and-current.md#existence-axis) ──
+    // ── Not found: the reconciler never reports Deleted (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/desired-and-current.md#existence-axis) ──
 
     [Fact]
     public void NotFound_ClearsTheState_KeepsTheId()
@@ -124,7 +124,7 @@ public class FirewallRuleLifecycleTests
         Assert.Equal(CurrentExistence.Exists, rule.CurrentExistence);
     }
 
-    // ── Request failure (docs/architecture/desired-and-current.md#request-failure) ──
+    // ── Request failure (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/desired-and-current.md#request-failure) ──
 
     [Fact]
     public void RequestFailed_OnAWaitingCreate_RecordsWhy_AndEndsTheCreate()

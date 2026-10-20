@@ -8,7 +8,7 @@ using Titan.Tests.Fakes;
 
 namespace Titan.Tests.Services;
 
-// docs/architecture/provider-and-worker.md#provider-command-lease: PUT a lease, GET what it holds, report on it.
+// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/provider-and-worker.md#provider-command-lease: PUT a lease, GET what it holds, report on it.
 public class ProviderCommandLeaseTests
 {
     private static readonly DateTimeOffset T0 = new(2026, 10, 8, 0, 0, 0, TimeSpan.Zero);

@@ -8,7 +8,7 @@ using Titan.Domain.Aggregates.Platform.Tenant;
 
 namespace Titan.Tests.Api;
 
-// docs/features/public-api/design.md#state-enums: the state fields are typed enums, and the words on the wire stay the
+// https://github.com/OpenViCloud/titan/blob/main/docs/features/public-api/design.md#state-enums: the state fields are typed enums, and the words on the wire stay the
 // ones the API has always sent — the member name, never a number. Options are FastEndpoints' default (web defaults).
 public class StateFieldJsonTests
 {

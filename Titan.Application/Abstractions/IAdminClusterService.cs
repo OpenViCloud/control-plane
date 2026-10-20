@@ -3,7 +3,7 @@ using Titan.Domain.Aggregates.Platform.Cluster;
 namespace Titan.Application.Abstractions;
 
 // Nothing here is secret: an Incus cluster is reached with Titan's own client identity, not a stored credential
-// (docs/features/cluster/design.md#cluster-incus). Source is "db" (a stored row) or "none" (a configured
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus). Source is "db" (a stored row) or "none" (a configured
 // zone nobody has registered a cluster for, which has no Id/CreatedAt/UpdatedAt).
 public record AdminClusterDto(
     Guid? Id,
@@ -16,7 +16,7 @@ public record AdminClusterDto(
     DateTimeOffset? UpdatedAt,
     AdminClusterProviderSettingsDto ProviderSettings);
 
-// Null = not set (docs/features/cluster/design.md#cluster-provider-settings).
+// Null = not set (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
 public record AdminClusterProviderSettingsDto(string? OvnUplinkNetwork, string? StoragePool, string? Ipv6Block)
 {
     public static AdminClusterProviderSettingsDto From(ClusterProviderSettings s) =>

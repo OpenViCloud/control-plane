@@ -2,17 +2,17 @@ using Titan.Domain.Exceptions;
 
 namespace Titan.Domain.Aggregates.Platform.Cluster;
 
-// The Incus names a zone's cluster uses that Titan cannot guess (docs/features/cluster/design.md#cluster-provider-settings).
+// The Incus names a zone's cluster uses that Titan cannot guess (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
 // `{ get; private init; }`, not a positional record: a public `with` would skip Create (the TenantQuota rule).
 public sealed record ClusterProviderSettings
 {
-    /// The OVN uplink network tenant networks attach to (docs/infra/incus/design.md#network).
+    /// The OVN uplink network tenant networks attach to (https://github.com/OpenViCloud/titan/blob/main/docs/infra/incus/design.md#network).
     public string? OvnUplinkNetwork { get; private init; }
 
     public string? StoragePool { get; private init; }
 
     /// The zone's public IPv6 /56: its /64s go to networks that ask for public IPv6
-    /// (docs/infra/incus/design.md#ipv6-address-plan). Null = the zone has no public IPv6.
+    /// (https://github.com/OpenViCloud/titan/blob/main/docs/infra/incus/design.md#ipv6-address-plan). Null = the zone has no public IPv6.
     public string? Ipv6Block { get; private init; }
 
     private ClusterProviderSettings() { }

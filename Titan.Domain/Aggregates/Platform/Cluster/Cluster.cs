@@ -1,7 +1,7 @@
 namespace Titan.Domain.Aggregates.Platform.Cluster;
 
 // Platform-owned, not tenant-scoped: the Incus cluster serving one zone. Titan pins the server certificate by its
-// SHA-256 fingerprint (docs/features/cluster/design.md#cluster-incus); there is no credential here, Titan
+// SHA-256 fingerprint (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus); there is no credential here, Titan
 // authenticates with its own client identity.
 public class Cluster
 {

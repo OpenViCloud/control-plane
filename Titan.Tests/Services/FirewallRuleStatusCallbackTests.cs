@@ -9,8 +9,8 @@ using Titan.Domain.Values;
 
 namespace Titan.Tests.Services;
 
-// The firewall rule callback (docs/features/network/design.md#firewall-rule-soft-delete): four reports, the Incus
-// ACL rule state word for word (docs/architecture/desired-and-current.md#provider-state-is-verbatim).
+// The firewall rule callback (https://github.com/OpenViCloud/titan/blob/main/docs/features/network/design.md#firewall-rule-soft-delete): four reports, the Incus
+// ACL rule state word for word (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/desired-and-current.md#provider-state-is-verbatim).
 public class FirewallRuleStatusCallbackTests
 {
     private static readonly Guid NetworkId = Guid.NewGuid();

@@ -22,7 +22,7 @@ public class TemplateServiceTests
     private const string TierS = "s", TierM = "m", TierL = "l";
 
     // Two zones, so every assertion about one zone can be contradicted by the other
-    // (docs/features/catalog/design.md#template-per-zone).
+    // (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
     private const string Mock = "mock", Eude = "eude01";
 
     private static readonly ZoneOptions Zones = new()
@@ -144,7 +144,7 @@ public class TemplateServiceTests
 
     // ── ListAsync (customer read) ───────────────────────────────────
 
-    // docs/features/catalog/design.md#template-listed: the customer catalog leaves out templates not offered, even
+    // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-listed: the customer catalog leaves out templates not offered, even
     // synced ones; admin still sees them, flagged.
     [Theory]
     [InlineData(Mock)]
@@ -174,7 +174,7 @@ public class TemplateServiceTests
     }
 
     // The worker imports the distro's own image when the template names one
-    // (docs/features/catalog/design.md#template-is-an-image-alias).
+    // (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-is-an-image-alias).
     [Fact]
     public async Task SyncAll_PassesTheTemplatesImageUrl()
     {
@@ -206,7 +206,7 @@ public class TemplateServiceTests
         Assert.Equal("CentOS-7.9", dto.Os);   // Os == OsImageName
         Assert.Equal(40, dto.DiskGb);
         // TemplateQueryResult has no Status/ExternalTemplateId/StatusReason members — masking is structural —
-        // and no Cpu/Vcpu/MemoryMb either (docs/features/catalog/design.md#template-borrows-sizing): the
+        // and no Cpu/Vcpu/MemoryMb either (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-borrows-sizing): the
         // template's tier is a base for the provider, not a description of the customer's VM. Naming those
         // members here would not compile.
     }
@@ -233,7 +233,7 @@ public class TemplateServiceTests
         Assert.Equal(["in-eude", "in-mock"], (await svc.ListAsync()).Select(d => d.Name));
     }
 
-    [Fact] // docs/features/catalog/design.md#zone-is-a-real-choice — an empty list would read "nothing synced there"
+    [Fact] // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#zone-is-a-real-choice — an empty list would read "nothing synced there"
     public async Task ListAsync_UnknownZone_ThrowsZoneNotFound()
     {
         var (svc, _, _) = Make(SyncedTemplate("a", "1"));
@@ -288,7 +288,7 @@ public class TemplateServiceTests
         Assert.Equal(("NotCreated", (string?)null, (string?)"boom"), (dtos["Broken"].CurrentExistence, dtos["Broken"].Transition, dtos["Broken"].RequestFailureReason));
     }
 
-    [Fact] // the raw provider error is the operator's: only the admin list carries it (docs/architecture/desired-and-current.md#request-failure)
+    [Fact] // the raw provider error is the operator's: only the admin list carries it (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/desired-and-current.md#request-failure)
     public async Task ListAllForAdmin_AFailedSync_CarriesReasonDetailAndTime_SoAdminCanDiagnose()
     {
         var t = PendingTemplate();
@@ -548,7 +548,7 @@ public class TemplateServiceTests
         Assert.True(repo.Saved);
     }
 
-    // The sync requests and their commands must commit together (docs/architecture/provider-and-worker.md#provider-command-table):
+    // The sync requests and their commands must commit together (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/provider-and-worker.md#provider-command-table):
     // every enqueue happens before the one save, so no command is left staged after it.
     [Fact]
     public async Task SyncAll_EnqueuesEveryCommand_BeforeItSaves()
@@ -582,7 +582,7 @@ public class TemplateServiceTests
         Assert.Equal("NotCreated/Exists/Syncing", Shape(fresh, Eude));
     }
 
-    // The repeat (docs/architecture/intent-and-observation.md#domain-refuses-a-repeat): a second press while a sync
+    // The repeat (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#domain-refuses-a-repeat): a second press while a sync
     // waits asks for nothing new — the same request stays — and only enqueues the command again.
     [Fact]
     public async Task SyncAll_Repeated_KeepsTheSameRequest_AndResendsTheCommand()

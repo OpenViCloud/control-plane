@@ -5,7 +5,7 @@ using Titan.Infrastructure.Persistence;
 
 namespace Titan.Tests.Infrastructure;
 
-// "One sync state per template per zone" (docs/features/catalog/design.md#template-per-zone) is the primary key of
+// "One sync state per template per zone" (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone) is the primary key of
 // vm_template_zones, not application code. The InMemory provider does not enforce keys the way Postgres does, so this
 // pins the model metadata the migration builds the table from.
 public class VmTemplateZoneSchemaTests

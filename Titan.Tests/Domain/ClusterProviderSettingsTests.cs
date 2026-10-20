@@ -3,7 +3,7 @@ using Titan.Domain.Aggregates.Platform.Cluster;
 namespace Titan.Tests.Domain;
 
 // The Incus names a zone's cluster uses that Titan cannot guess: the OVN uplink network and the storage pool
-// (docs/features/cluster/design.md#cluster-provider-settings). Null means "not set".
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings). Null means "not set".
 public class ClusterProviderSettingsTests
 {
     [Fact]
@@ -52,7 +52,7 @@ public class ClusterProviderSettingsTests
         Assert.Equal("2001:41d0:d00:d400::/56", settings.Ipv6Block);
     }
 
-    // The address plan numbers the /64s of a /56 (docs/infra/incus/design.md#ipv6-address-plan): anything else
+    // The address plan numbers the /64s of a /56 (https://github.com/OpenViCloud/titan/blob/main/docs/infra/incus/design.md#ipv6-address-plan): anything else
     // would hand out /64s outside the block OVH routes.
     [Theory]
     [InlineData("10.0.0.0/8")]

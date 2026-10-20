@@ -2,9 +2,9 @@ using Titan.Domain.Exceptions;
 using Titan.Domain.Values;
 namespace Titan.Domain.Aggregates.Catalog.VmTemplate;
 
-// A template answers "which operating system", never "how big" (docs/features/catalog/design.md#vm-offering-sizing).
+// A template answers "which operating system", never "how big" (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#vm-offering-sizing).
 // It points at an offering (VmOfferingId) for its base sizing instead of owning sizing numbers: a tier id cannot drift
-// (docs/features/catalog/design.md#template-borrows-sizing).
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-borrows-sizing).
 public class VmTemplate
 {
     public Guid Id { get; private set; }
@@ -13,11 +13,11 @@ public class VmTemplate
     public string OsImageName { get; private set; } = default!;
 
     /// The distro's own cloud image, with "{arch}" where the distro names the architecture; null ⇒ the worker
-    /// pulls OsImageName from the image server (docs/features/catalog/design.md#template-is-an-image-alias).
+    /// pulls OsImageName from the image server (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-is-an-image-alias).
     /// Set by the seed only.
     public string? ImageUrl { get; private set; }
 
-    /// Customers see and may pick only listed templates (docs/features/catalog/design.md#template-listed).
+    /// Customers see and may pick only listed templates (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-listed).
     /// Create lists a template; only the seed unlists one.
     public bool IsListed { get; private set; }
     public int? RootDiskSizeGb { get; private set; }
@@ -30,7 +30,7 @@ public class VmTemplate
     public DateTimeOffset UpdatedAt { get; private set; }
 
     /// One sync state per zone the template was asked into or observed in
-    /// (docs/features/catalog/design.md#template-per-zone).
+    /// (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
     private readonly List<VmTemplateZone> _zones = [];
     public IReadOnlyCollection<VmTemplateZone> Zones => _zones;
 
@@ -82,7 +82,7 @@ public class VmTemplate
     }
 
     /// The image alias a VM in that zone is created from, handed out only past the check
-    /// (docs/architecture/intent-and-observation.md#aggregate-hands-out-provider-id).
+    /// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#aggregate-hands-out-provider-id).
     public string ProviderIdIn(string zoneId)
     {
         VmTemplateZone? zone = ZoneOrNull(zoneId);
@@ -107,14 +107,14 @@ public class VmTemplate
     }
 
     /// Refused when that zone has the alias or a sync waiting: the handler recognises the repeat first and
-    /// re-sends the command (docs/architecture/intent-and-observation.md#domain-refuses-a-repeat).
+    /// re-sends the command (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#domain-refuses-a-repeat).
     public void RequestSyncIn(string zoneId)
     {
         RowFor(zoneId).RequestSync();
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    /// Observations converge (docs/architecture/intent-and-observation.md#observation-converges): a report for a
+    /// Observations converge (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#observation-converges): a report for a
     /// zone with no row yet records what was observed there instead of refusing it. Which zones exist is the
     /// handler's check, not the aggregate's. Returns whether it ended a waiting sync.
     public bool MarkCreatedIn(string zoneId, string externalTemplateId)

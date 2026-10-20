@@ -1,4 +1,4 @@
-// Same namespace as IdempotencyService on purpose (docs/architecture/code-structure.md#services-branch).
+// Same namespace as IdempotencyService on purpose (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/code-structure.md#services-branch).
 
 namespace Titan.Application.Services.Platform;
 

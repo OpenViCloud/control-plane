@@ -5,7 +5,7 @@ namespace Titan.Domain.Repositories.Billing;
 public interface IUsageRecordRepository
 {
     /// INSERT ... ON CONFLICT (resource_type, resource_id, bucket) DO NOTHING: a duplicate tick is a no-op,
-    /// never an exception (docs/architecture/money-and-wallet.md#append-only-metering). Returns whether a row
+    /// never an exception (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#append-only-metering). Returns whether a row
     /// was inserted.
     Task<bool> TryInsertAsync(UsageRecord record, CancellationToken ct);
 

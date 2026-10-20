@@ -8,7 +8,7 @@ using Titan.Domain.Repositories.Platform;
 namespace Titan.Infrastructure.Incus;
 
 // Generates Titan's client identity on first use and reads it back ever after
-// (docs/features/cluster/design.md#provider-client-identity). The private key is encrypted before it reaches
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#provider-client-identity). The private key is encrypted before it reaches
 // the aggregate and decrypted only to build the TLS client certificate.
 public sealed class ProviderClientIdentityStore(
     IProviderClientIdentityRepository repository, IClusterCredentialCipher cipher, ProviderClientCertificateCache cache)
@@ -37,7 +37,7 @@ public sealed class ProviderClientIdentityStore(
         return cache.Keep(identity.Fingerprint, loaded);
     }
 
-    /// Only for the worker's connection route (docs/features/cluster/design.md#worker-cluster-connection): the private
+    /// Only for the worker's connection route (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#worker-cluster-connection): the private
     /// key leaves the control plane here and nowhere else.
     public async Task<ProviderClientKeyPair> GetKeyPairAsync(CancellationToken ct)
     {

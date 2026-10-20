@@ -183,7 +183,7 @@ public class BillingServiceTests
 
         var result = await CreateService().GetTenantSummaryAsync(2026, 4, default);
 
-        Assert.Equal(1000m, result.ComputeCost);   // 6000 VND/h × 10/60 h = 1000 (docs/architecture/money-and-wallet.md#money-is-long-vnd, whole VND)
+        Assert.Equal(1000m, result.ComputeCost);   // 6000 VND/h × 10/60 h = 1000 (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#money-is-long-vnd, whole VND)
         Assert.Equal(2000m, result.StorageCost);    // 300 VND/GB/h × 10/60 h × 40 GB = 2000
         Assert.Equal(result.ComputeCost + result.StorageCost, result.TotalCost);
         // Disk usage does not attribute to a per-VM row — it is not owned by any one VM.
@@ -215,7 +215,7 @@ public class BillingServiceTests
     }
 
     // The summary and the VM cost read the raw product; rounding belongs to the invoice line
-    // (docs/architecture/money-and-wallet.md#money-is-long-vnd).
+    // (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#money-is-long-vnd).
     [Fact]
     public async Task GetTenantSummary_AndVmCost_AreRawSums_NotRoundedPerRecord()
     {
@@ -315,7 +315,7 @@ public class FakeUsageRecordRepository : IUsageRecordRepository
 }
 
 /// Catalog fakes for the meters: price lives on the offering
-/// (docs/architecture/money-and-wallet.md#price-belongs-to-offering), so "what does this tier cost" is a
+/// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#price-belongs-to-offering), so "what does this tier cost" is a
 /// catalog read.
 public class FakeVmOfferingRepository : IVmOfferingRepository
 {

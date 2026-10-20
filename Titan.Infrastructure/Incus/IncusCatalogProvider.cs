@@ -6,7 +6,7 @@ using Titan.Domain.Repositories.Platform;
 
 namespace Titan.Infrastructure.Incus;
 
-// Live reads of a zone's Incus cluster for the public catalog (docs/features/cluster/design.md#cluster-incus).
+// Live reads of a zone's Incus cluster for the public catalog (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus).
 // Resolved per call, so an admin's edit of the cluster row takes effect on the next read.
 // Both routes are anonymous: a failure keeps its code but loses its detail (endpoint, fingerprints), which goes to the
 // log for the operator.

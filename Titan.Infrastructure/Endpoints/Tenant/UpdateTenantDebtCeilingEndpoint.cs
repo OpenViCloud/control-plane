@@ -5,11 +5,11 @@ using Titan.Application.Commands.Platform.Tenant.Contracts;
 
 namespace Titan.Infrastructure.Endpoints.Tenant;
 
-// The body of PATCH /v1/tenants/{tenantId}/debt-ceiling — the route carries the tenant (docs/architecture/code-structure.md#command-is-wire-contract).
+// The body of PATCH /v1/tenants/{tenantId}/debt-ceiling — the route carries the tenant (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/code-structure.md#command-is-wire-contract).
 public record UpdateDebtCeilingRequest(decimal DebtCeiling);
 
 // A reference number read at month-end close; it gates nothing
-// (docs/architecture/money-and-wallet.md#postpaid-no-brake). Covered by TenantServiceTests.
+// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#postpaid-no-brake). Covered by TenantServiceTests.
 public class UpdateTenantDebtCeilingEndpoint(UpdateTenantDebtCeilingCommandHandler updateDebtCeiling)
     : Endpoint<UpdateDebtCeilingRequest>
 {

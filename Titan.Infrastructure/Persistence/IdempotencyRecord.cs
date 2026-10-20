@@ -1,7 +1,7 @@
 namespace Titan.Infrastructure.Persistence;
 
 /// <summary>
-/// Not a domain aggregate (docs/features/public-api/design.md#idempotency-store).
+/// Not a domain aggregate (https://github.com/OpenViCloud/titan/blob/main/docs/features/public-api/design.md#idempotency-store).
 /// </summary>
 public class IdempotencyRecord
 {

@@ -1,6 +1,6 @@
 namespace Titan.Domain.Aggregates.Platform.ProviderCommand;
 
-/// docs/architecture/provider-and-worker.md#provider-command-table — Pending is written in the caller's transaction;
+/// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/provider-and-worker.md#provider-command-table — Pending is written in the caller's transaction;
 /// a worker's lease moves it to Leased; the worker's report ends it Done or Failed. A Leased row whose lease ran out
 /// is claimable again.
 public enum ProviderCommandStatus

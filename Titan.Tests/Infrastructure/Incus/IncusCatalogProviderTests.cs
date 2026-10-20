@@ -4,7 +4,7 @@ using ClusterAggregate = Titan.Domain.Aggregates.Platform.Cluster.Cluster;
 
 namespace Titan.Tests.Infrastructure.Incus;
 
-// The catalog reads a zone's Incus cluster live (docs/features/cluster/design.md#cluster-incus). Bodies are
+// The catalog reads a zone's Incus cluster live (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus). Bodies are
 // the lab recordings, which is where the two traps come from: a single server's /1.0/cluster has server_name "", and an
 // untrusted client gets 200 with an empty image list — a catalog that looks healthy and is not.
 public class IncusCatalogProviderTests

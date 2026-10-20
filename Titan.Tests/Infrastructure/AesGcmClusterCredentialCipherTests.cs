@@ -4,7 +4,7 @@ using Titan.Infrastructure.Incus;
 
 namespace Titan.Tests.Infrastructure;
 
-// Titan's TLS client key is encrypted at rest with AES-256-GCM (docs/features/cluster/design.md#cluster-db-entity). GCM is chosen
+// Titan's TLS client key is encrypted at rest with AES-256-GCM (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-db-entity). GCM is chosen
 // over raw AES so a tampered ciphertext fails to decrypt (authenticated) rather than silently
 // yielding a garbage key. These tests pin: round-trip,
 // a fresh nonce per encryption (identical plaintext → different ciphertext), tamper detection, and

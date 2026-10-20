@@ -32,7 +32,7 @@ public sealed class OwnDatabaseDbTests : IAsyncLifetime
     private static string Certificate(string marker) =>
         $"-----BEGIN CERTIFICATE-----\n{marker}\n-----END CERTIFICATE-----\n";
 
-    // Two control planes starting at once must end with one identity (docs/features/cluster/design.md#provider-client-identity):
+    // Two control planes starting at once must end with one identity (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#provider-client-identity):
     // a second one would make every cluster that trusts the first refuse Titan.
     [Fact]
     public async Task TwoWritersStoringTheIdentity_EndWithOneRow_AndTheLoserIsToldSo()
@@ -60,7 +60,7 @@ public sealed class OwnDatabaseDbTests : IAsyncLifetime
         }
     }
 
-    // The listed price is kept at the precision usage is billed at (docs/architecture/money-and-wallet.md#rate-value-object).
+    // The listed price is kept at the precision usage is billed at (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#rate-value-object).
     [Fact]
     public async Task ACatalogPriceWithTenDecimals_SurvivesTheRoundTrip()
     {

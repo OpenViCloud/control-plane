@@ -16,7 +16,7 @@ public enum TemplateSyncOutcome { AllSynced, TimedOut, HasFailures, NoZones }
 // runs it any more. The command only enqueues and the worker reconciles asynchronously, so completion is observed by
 // polling. The verdict covers the whole catalog: one zone whose sync gave up makes the run HasFailures even when the other
 // zones synced — their sync goes on regardless, the exit code only reports it
-// (docs/features/catalog/design.md#template-per-zone).
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
 //
 // A job, not a handler: it injects the command handler the way TenantResolutionMiddleware injects Platform's.
 public class TemplateSyncRunner(
@@ -34,7 +34,7 @@ public class TemplateSyncRunner(
         CancellationToken ct = default)
     {
         // No zone means nothing to sync and nothing left pending — a count that reads as done. The Job gets its zone
-        // list from the same config as the API (docs/features/catalog/design.md#template-per-zone); without it, fail.
+        // list from the same config as the API (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone); without it, fail.
         bool noZoneConfigured = zones.Zones.Count == 0;
         if (noZoneConfigured)
         {

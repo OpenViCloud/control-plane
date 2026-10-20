@@ -15,7 +15,7 @@
 # None of them ⇒ RESULT: INCOMPLETE and exit 2: they are the only coverage of real migrations and of the
 # money-path concurrency guards, so a run without them is not a pass.
 #
-# Usage:  ./control-plane/test-all.sh [--no-build]
+# Usage:  ./test-all.sh [--no-build]
 # Exit:   0 every step ran and passed · 1 a step failed · 2 full-host and integration did not run, or the
 #         port-forward to the dev database died during them
 set -uo pipefail
@@ -42,7 +42,7 @@ run_step() {
 run_step "unit"      'Category!=Integration&Category!=FullHost'
 
 DEV_KUBECONFIG="$HOME/.lima/titan-k3s/copied-from-guest/kubeconfig.yaml"
-# Same value as local-cluster/mac/scripts/bootstrap-secrets.sh: a test password, the cluster only listens on 127.0.0.1.
+# Same value as https://github.com/OpenViCloud/titan/blob/main/local-cluster/mac/scripts/bootstrap-secrets.sh: a test password, the cluster only listens on 127.0.0.1.
 # SSL off: .NET on macOS fails the TLS handshake with CNPG ("bad protocol version"); the hop is loopback into
 # kubectl's port-forward tunnel, not the network.
 DEV_TEST_SERVER="Host=127.0.0.1;Port=15432;Username=titan_it;Password=titan-it-local-only;Database=postgres;SSL Mode=Disable"
@@ -125,7 +125,7 @@ run_db_step() {
     fi
 }
 
-# FullHost runs the real host on its own Postgres database (docs/architecture/testing.md#doubles-only-in-unit-tests),
+# FullHost runs the real host on its own Postgres database (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/testing.md#doubles-only-in-unit-tests),
 # so it needs the same server as Integration.
 if [ -n "$integration_source" ]; then
     echo

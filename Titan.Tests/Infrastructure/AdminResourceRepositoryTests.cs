@@ -6,7 +6,7 @@ using Titan.Infrastructure.Repositories;
 
 namespace Titan.Tests.Infrastructure;
 
-// docs/architecture/tenancy-and-admin.md#admin-cross-tenant-read — the cross-tenant read query itself, against a real (InMemory) DbContext.
+// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/tenancy-and-admin.md#admin-cross-tenant-read — the cross-tenant read query itself, against a real (InMemory) DbContext.
 // This is where the security-relevant behavior lives: ListAllAsync spans tenants (unlike the
 // scoped ListByTenantAsync it sits beside and must NOT replace), narrows to one tenant when asked,
 // and still hides terminal rows (Destroyed VMs / Deleted networks) so an admin sees live inventory,

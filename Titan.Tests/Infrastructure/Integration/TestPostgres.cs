@@ -8,7 +8,7 @@ namespace Titan.Tests.Infrastructure.Integration;
 /// collection fixture), with the shape of the Testcontainers container it replaces (StartAsync /
 /// GetConnectionString / DisposeAsync).
 /// - TITAN_IT_POSTGRES set: a fresh database on that server, dropped afterwards. This is how the Mac runs the
-///   suite without Docker, against the dev cluster's Postgres (control-plane/test-all.sh sets it).
+///   suite without Docker, against the dev cluster's Postgres (test-all.sh sets it).
 /// - Unset: a throwaway postgres:16 container, as CI has always done.
 /// The server must be loopback: the variable reaching a shared database would let tests create and drop there.
 /// </summary>

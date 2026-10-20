@@ -8,9 +8,9 @@ public record VmOfferingQueryResult(
     decimal Cpu,        // = CpuUnits; carried to the worker, which sizes the instance from Vcpu (limits.cpu)
     int Vcpu,           // = VcpuCount
     int MemoryMb,
-    // VND/hour: one currency system-wide, so no per-row currency (docs/architecture/money-and-wallet.md#money-is-long-vnd).
+    // VND/hour: one currency system-wide, so no per-row currency (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#money-is-long-vnd).
     // Public so a customer sees what a tier costs before creating one
-    // (docs/architecture/money-and-wallet.md#price-belongs-to-offering).
+    // (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#price-belongs-to-offering).
     decimal PricePerHour)
 {
     public static VmOfferingQueryResult From(VmOfferingAggregate o) =>

@@ -7,7 +7,7 @@ namespace Titan.Application.Services.Billing.Invoice;
 
 // Three query handlers show an invoice's payment state, and handlers may not call each other
 // (ReadWriteSeparationTests.Handlers_DoNotReferenceOtherHandlers)
-// (docs/architecture/code-structure.md#services-branch).
+// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/code-structure.md#services-branch).
 public static class InvoicePaymentStates
 {
     /// Read from the outbox mutations raised against the invoices. An invoice nobody has paid has no

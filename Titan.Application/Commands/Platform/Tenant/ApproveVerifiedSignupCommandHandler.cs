@@ -5,7 +5,7 @@ using Titan.Domain.Repositories.Platform;
 namespace Titan.Application.Commands.Platform.Tenant;
 
 /// A PendingApproval signup whose email is verified becomes Active, without any admin action. The middleware
-/// opens the wallet before calling this (docs/architecture/tenancy-and-admin.md#approval-is-activation).
+/// opens the wallet before calling this (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/tenancy-and-admin.md#approval-is-activation).
 /// No-op if the tenant is missing or no longer PendingApproval.
 public class ApproveVerifiedSignupCommandHandler(ITenantRepository repo)
 {
@@ -17,7 +17,7 @@ public class ApproveVerifiedSignupCommandHandler(ITenantRepository repo)
             return; // gone — the middleware asked for a tenant that no longer exists
         }
 
-        // Repeat (docs/architecture/intent-and-observation.md#domain-refuses-a-repeat): two requests of a verified caller
+        // Repeat (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#domain-refuses-a-repeat): two requests of a verified caller
         // can race. Either way it is already approved.
         bool alreadyApproved = tenant.Status != TenantStatus.PendingApproval;
         if (alreadyApproved)

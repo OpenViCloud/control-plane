@@ -3,7 +3,7 @@ using Titan.Domain.Values;
 
 namespace Titan.Tests.Domain;
 
-// docs/architecture/money-and-wallet.md#round-once — a usage record keeps the raw product (rate × hours × quantity); money
+// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#round-once — a usage record keeps the raw product (rate × hours × quantity); money
 // becomes whole VND once, on an invoice line (UsageRecord.TotalVnd), half away from zero. Rounding each 10-minute record
 // billed every snapshot and every volume under ~1.9 GB at 0 ₫ and a 2 GB volume at +90%.
 public class UsageRecordRoundingTests

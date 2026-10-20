@@ -3,7 +3,7 @@ using Titan.Domain.Exceptions;
 
 namespace Titan.Tests.Domain;
 
-// docs/architecture/provider-and-worker.md#provider-command-table and #provider-command-key.
+// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/provider-and-worker.md#provider-command-table and #provider-command-key.
 public class ProviderCommandTests
 {
     private static readonly DateTimeOffset T0 = new(2026, 10, 8, 0, 0, 0, TimeSpan.Zero);

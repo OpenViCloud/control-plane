@@ -20,7 +20,7 @@ public class CreateNetworkCommandHandler(
 {
     public async Task<CreateNetworkCommandResult> HandleAsync(CreateNetworkCommand command, CancellationToken ct = default)
     {
-        var req = command;   // the command IS the wire contract (docs/architecture/code-structure.md#command-is-wire-contract)
+        var req = command;   // the command IS the wire contract (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/code-structure.md#command-is-wire-contract)
 
         var tenantId = currentUser.RequireTenantId();
         var tenant = await tenantRepo.FindByIdAsync(tenantId, ct)
@@ -34,7 +34,7 @@ public class CreateNetworkCommandHandler(
         if (req.Cidr is not null && await repo.HasCidrOverlapAsync(tenantId, req.Cidr, ct))
             throw new BusinessException("NETWORK_CIDR_OVERLAP", $"CIDR '{req.Cidr}' overlaps with an existing network.");
 
-        zones.Require(req.ZoneId); // docs/features/catalog/design.md#zone-is-a-real-choice
+        zones.Require(req.ZoneId); // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#zone-is-a-real-choice
         NetworkPublicIpv6? publicIpv6 = null;
         int activePublicIpv6Count = 0;
         if (req.EnablePublicIpv6)
@@ -56,7 +56,7 @@ public class CreateNetworkCommandHandler(
         return new CreateNetworkCommandResult(network.Id);
     }
 
-    // A zone has public IPv6 when its cluster names both the uplink and the /56 (docs/infra/incus/design.md#ipv6-address-plan).
+    // A zone has public IPv6 when its cluster names both the uplink and the /56 (https://github.com/OpenViCloud/titan/blob/main/docs/infra/incus/design.md#ipv6-address-plan).
     // Two creates that pick the same free /64 at once meet at the unique index, not here.
     private async Task<NetworkPublicIpv6> FreePublicIpv6Async(string zoneId, CancellationToken ct)
     {

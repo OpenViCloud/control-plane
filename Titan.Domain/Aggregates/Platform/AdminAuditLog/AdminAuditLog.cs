@@ -1,6 +1,6 @@
 namespace Titan.Domain.Aggregates.Platform.AdminAuditLog;
 
-// Durable, append-only trace of admin writes (docs/architecture/tenancy-and-admin.md#admin-audit). Append-only
+// Durable, append-only trace of admin writes (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/tenancy-and-admin.md#admin-audit). Append-only
 // by construction: no mutator, all setters private.
 public class AdminAuditLog
 {

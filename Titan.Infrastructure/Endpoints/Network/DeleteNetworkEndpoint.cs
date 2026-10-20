@@ -17,6 +17,6 @@ public class DeleteNetworkEndpoint(DeleteNetworkCommandHandler handler) : Endpoi
     {
         var networkId = Route<Guid>("networkId");
         await handler.HandleAsync(new DeleteNetworkCommand(networkId), ct);
-        await SendResultAsync(TypedResults.StatusCode(StatusCodes.Status202Accepted)); // docs/architecture/http-contract.md#async-actions-return-202: no body, not `{}`
+        await SendResultAsync(TypedResults.StatusCode(StatusCodes.Status202Accepted)); // https://github.com/OpenViCloud/titan/blob/main/docs/architecture/http-contract.md#async-actions-return-202: no body, not `{}`
     }
 }

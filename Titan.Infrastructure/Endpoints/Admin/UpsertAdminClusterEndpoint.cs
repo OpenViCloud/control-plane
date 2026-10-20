@@ -6,7 +6,7 @@ namespace Titan.Infrastructure.Endpoints.Admin;
 
 public record UpsertClusterRequest(string? Name, string Endpoint, string ServerFingerprint);
 
-// PUT is an upsert keyed by {zoneId} (docs/features/cluster/design.md#cluster-incus).
+// PUT is an upsert keyed by {zoneId} (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus).
 public class UpsertAdminClusterEndpoint(IAdminClusterService clusters)
     : Endpoint<UpsertClusterRequest>
 {

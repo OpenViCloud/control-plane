@@ -25,7 +25,7 @@ public class UpdateTemplateStatusEndpoint(UpdateTemplateStatusCommandHandler han
 
         // A report without its zone cannot say whose state it is — a worker older than per-zone templates sends
         // none; refusing it fails that run, and the next sync-all with both images live converges
-        // (docs/features/catalog/design.md#template-per-zone).
+        // (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
         if (string.IsNullOrEmpty(req.ZoneId))
         {
             await SendErrorsAsync(400, ct);

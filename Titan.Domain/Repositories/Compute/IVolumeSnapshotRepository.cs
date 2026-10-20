@@ -7,7 +7,7 @@ public interface IVolumeSnapshotRepository
     Task<VolumeSnapshot?> FindByIdAsync(Guid id, CancellationToken ct = default);
     Task<List<VolumeSnapshot>> FindByVolumeIdAsync(Guid volumeId, CancellationToken ct = default);
     Task<int> CountActiveByVolumeIdAsync(Guid volumeId, CancellationToken ct = default);
-    /// All tenants: Incus holds it — including while a delete waits (docs/features/volume/design.md#counting-and-billing).
+    /// All tenants: Incus holds it — including while a delete waits (https://github.com/OpenViCloud/titan/blob/main/docs/features/volume/design.md#counting-and-billing).
     Task<List<VolumeSnapshot>> ListBillableAsync(CancellationToken ct = default);
     /// Snapshots of volumes in a zone that the storage reconciler should observe: provider id, not Deleted.
     Task<List<VolumeSnapshot>> ListReconcilableAsync(string zoneId, CancellationToken ct = default);

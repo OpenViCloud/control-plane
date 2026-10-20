@@ -10,7 +10,7 @@ public record ReconcilableStorageQueryResult(
 
 // CurrentAttachedExternalVmId is the Incus instance name of the Titan VM last seen using the volume, so the worker
 // compares names it reads in used_by without knowing which instances are Titan VMs
-// (docs/features/volume/design.md#attachment-from-used-by).
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/volume/design.md#attachment-from-used-by).
 public record ReconcilableVolumeQueryResult(
     Guid Id,
     string ExternalId,

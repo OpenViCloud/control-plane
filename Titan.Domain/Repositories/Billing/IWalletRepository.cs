@@ -2,16 +2,16 @@ using Titan.Domain.Aggregates.Billing.Wallet;
 
 namespace Titan.Domain.Repositories.Billing;
 
-/// Money moves through Wallet.Credit/Debit (docs/architecture/money-and-wallet.md#wallet-invariant-in-aggregate);
+/// Money moves through Wallet.Credit/Debit (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#wallet-invariant-in-aggregate);
 /// the balance and its ledger row commit in one SaveChanges, and the wallet's version token makes a
-/// concurrent writer lose (docs/architecture/money-and-wallet.md#version-token).
+/// concurrent writer lose (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#version-token).
 public interface IWalletRepository
 {
     /// Tracked. Null when no wallet was opened for the tenant.
     Task<Wallet?> GetByTenantForUpdateAsync(Guid tenantId, CancellationToken ct);
 
     /// Tracked. A wallet mutation names its wallet by id, not tenant
-    /// (docs/architecture/money-and-wallet.md#single-writer-outbox).
+    /// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#single-writer-outbox).
     Task<Wallet?> GetByIdForUpdateAsync(Guid walletId, CancellationToken ct);
 
     /// Untracked. 0, and no row created, for a tenant with no wallet.

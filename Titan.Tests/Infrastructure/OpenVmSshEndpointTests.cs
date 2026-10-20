@@ -19,7 +19,7 @@ using ClusterAggregate = Titan.Domain.Aggregates.Platform.Cluster.Cluster;
 
 namespace Titan.Tests.Infrastructure;
 
-// The SSH endpoint's own gates (docs/features/vm/design.md#ssh-session): a websocket only, the per-tenant session
+// The SSH endpoint's own gates (https://github.com/OpenViCloud/titan/blob/main/docs/features/vm/design.md#ssh-session): a websocket only, the per-tenant session
 // limit before anything is recorded or execed, and the order that keeps a refusal free of side effects. Silent about
 // authentication and the pipeline: Factory.Create builds the endpoint without a host.
 public class OpenVmSshEndpointTests

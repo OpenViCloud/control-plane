@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace Titan.Infrastructure.Incus;
 
 // GCM is authenticated: a tampered blob throws on Decrypt rather than yielding a garbage TLS key
-// (docs/features/cluster/design.md#cluster-password-write-only). Blob layout: nonce (12) ‖ tag (16) ‖
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-password-write-only). Blob layout: nonce (12) ‖ tag (16) ‖
 // ciphertext; a fresh nonce per Encrypt. A bad Encryption__ClusterKey throws in the ctor.
 public sealed class AesGcmClusterCredentialCipher : IClusterCredentialCipher
 {

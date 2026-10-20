@@ -8,7 +8,7 @@ using Titan.Infrastructure.Messaging;
 
 namespace Titan.Tests.Services;
 
-// docs/architecture/money-and-wallet.md#single-writer-outbox — the subscriber against a fake bus.
+// https://github.com/OpenViCloud/titan/blob/main/docs/architecture/money-and-wallet.md#single-writer-outbox — the subscriber against a fake bus.
 // Silent about whether NATS itself delivers: there is no Testcontainers NATS in CI.
 public class WalletMutationSubscriberTests
 {
@@ -103,7 +103,7 @@ public class WalletMutationSubscriberTests
     // record between fakes, which can never disagree with themselves; this one asserts the serialized text.
     //
     // A rename is safe to ship only because the control-plane deploys replicas: 1 with strategy: Recreate
-    // (gitops/control-plane/base/deployment.yaml), so two versions never share the subject. Under
+    // (https://github.com/OpenViCloud/titan/blob/main/gitops/control-plane/base/deployment.yaml), so two versions never share the subject. Under
     // RollingUpdate a subscriber reading the old name would deserialize Guid.Empty, find no row and
     // return silently — a delayed apply (the sweeper re-drives it), but nothing logs an error.
     [Fact]

@@ -7,7 +7,7 @@ using Titan.Infrastructure.Endpoints.Legal;
 namespace Titan.Tests.Infrastructure;
 
 // GetLegalDocumentEndpoint carries its own logic: it reads ?lang= off the query string
-// (docs/features/legal/design.md#legal-endpoints). The handler is concrete, so it runs for real on the real catalog.
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/legal/design.md#legal-endpoints). The handler is concrete, so it runs for real on the real catalog.
 public class GetLegalDocumentEndpointTests
 {
     private static async Task<LegalDocumentQueryResult> Get(string queryString)

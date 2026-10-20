@@ -6,7 +6,7 @@ using Titan.Application.Commands.Compute.LoadBalancer.Contracts;
 namespace Titan.Infrastructure.Endpoints.Internal;
 
 // The create, update and delete commands and the load balancer reconciler all report here
-// (docs/features/load-balancer/design.md#lb-lifecycle).
+// (https://github.com/OpenViCloud/titan/blob/main/docs/features/load-balancer/design.md#lb-lifecycle).
 public class UpdateLoadBalancerStatusEndpoint(UpdateLoadBalancerStatusCommandHandler handler, IConfiguration config)
     : Endpoint<UpdateLoadBalancerStatusBody>
 {
