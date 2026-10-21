@@ -22,7 +22,7 @@ public class AesGcmClusterCredentialCipherTests
     public void RoundTrip_DecryptReturnsOriginalPlaintext()
     {
         var cipher = Cipher();
-        const string secret = "s3cr3t-oneadmin-password";
+        const string secret = "s3cr3t-admin-password";
 
         var decrypted = cipher.Decrypt(cipher.Encrypt(secret));
 
