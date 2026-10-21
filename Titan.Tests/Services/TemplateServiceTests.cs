@@ -23,11 +23,11 @@ public class TemplateServiceTests
 
     // Two zones, so every assertion about one zone can be contradicted by the other
     // (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
-    private const string Mock = "mock", Eude = "eude01";
+    private const string Mock = "mock", Singapore = "singapore01";
 
     private static readonly ZoneOptions Zones = new()
     {
-        Zones = [new ZoneConfig { Id = Mock, Name = "Mock" }, new ZoneConfig { Id = Eude, Name = "EU DE 01" }],
+        Zones = [new ZoneConfig { Id = Mock, Name = "Mock" }, new ZoneConfig { Id = Singapore, Name = "Singapore 01" }],
     };
 
     private static (TemplateFacade svc, StubRepo repo, Mock<IProviderCommandQueue> wf) Make(params VmTemplate[] seed)
@@ -211,26 +211,26 @@ public class TemplateServiceTests
         // members here would not compile.
     }
 
-    [Fact] // a template synced in mock only does not exist for a customer creating in eude01
+    [Fact] // a template synced in mock only does not exist for a customer creating in singapore01
     public async Task ListAsync_InAZone_ShowsOnlyTemplatesSyncedInThatZone()
     {
         var inMock = SyncedTemplate("in-mock", "5", Mock);
-        var inEude = SyncedTemplate("in-eude", "6", Eude);
-        var (svc, _, _) = Make(inMock, inEude);
+        var inSingapore = SyncedTemplate("in-singapore", "6", Singapore);
+        var (svc, _, _) = Make(inMock, inSingapore);
 
         Assert.Equal(["in-mock"], (await svc.ListAsync(Mock)).Select(d => d.Name));
-        Assert.Equal(["in-eude"], (await svc.ListAsync(Eude)).Select(d => d.Name));
+        Assert.Equal(["in-singapore"], (await svc.ListAsync(Singapore)).Select(d => d.Name));
     }
 
     [Fact] // no zone: names the template of a VM in any zone (VM list page)
     public async Task ListAsync_WithoutAZone_ShowsTemplatesSyncedInAnyZone()
     {
         var inMock = SyncedTemplate("in-mock", "5", Mock);
-        var inEude = SyncedTemplate("in-eude", "6", Eude);
+        var inSingapore = SyncedTemplate("in-singapore", "6", Singapore);
         var nowhere = PendingTemplate();
-        var (svc, _, _) = Make(inMock, inEude, nowhere);
+        var (svc, _, _) = Make(inSingapore, inMock, nowhere);
 
-        Assert.Equal(["in-eude", "in-mock"], (await svc.ListAsync()).Select(d => d.Name));
+        Assert.Equal(["in-mock", "in-singapore"], (await svc.ListAsync()).Select(d => d.Name));
     }
 
     [Fact] // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#zone-is-a-real-choice — an empty list would read "nothing synced there"
@@ -318,14 +318,14 @@ public class TemplateServiceTests
     [Fact] // one template, two clusters: two existences, two ids, ordered by zone id
     public async Task ListAllForAdmin_ShowsEachZonesExistenceAndId()
     {
-        var t = SyncedTemplate("Ubuntu", "205", Mock);
-        t.RequestSyncIn(Eude);
+        var t = SyncedTemplate("Ubuntu", "205", Singapore);
+        t.RequestSyncIn(Mock);
         var (svc, _, _) = Make(t);
 
         var zones = Assert.Single(await svc.ListAllForAdminAsync()).Zones;
 
         Assert.Equal(
-            [(Eude, "NotCreated", (string?)"Syncing", (string?)null), (Mock, "Exists", null, "205")],
+            [(Mock, "NotCreated", (string?)"Syncing", (string?)null), (Singapore, "Exists", null, "205")],
             zones.Select(z => (z.ZoneId, z.CurrentExistence, z.Transition, z.ExternalTemplateId)));
     }
 
@@ -369,12 +369,12 @@ public class TemplateServiceTests
     public async Task UpdateStatus_InOneZone_LeavesTheOtherZoneAlone()
     {
         var t = PendingTemplate();
-        t.RequestSyncIn(Eude);
+        t.RequestSyncIn(Singapore);
         var (svc, _, _) = Make(t);
 
-        await svc.UpdateStatusAsync(t.Id, Report("Created", extId: "3", zoneId: Eude));
+        await svc.UpdateStatusAsync(t.Id, Report("Created", extId: "3", zoneId: Singapore));
 
-        Assert.Equal("Exists/Exists/-", Shape(t, Eude));
+        Assert.Equal("Exists/Exists/-", Shape(t, Singapore));
         Assert.Equal("NotCreated/Exists/Syncing", Shape(t, Mock));
     }
 
@@ -526,7 +526,7 @@ public class TemplateServiceTests
 
         await svc.SyncAllAsync();
 
-        foreach (string zoneId in new[] { Mock, Eude })
+        foreach (string zoneId in new[] { Mock, Singapore })
         {
             wf.Verify(w => w.EnqueueTemplateSyncAsync(t.Id, zoneId, "a", null, "img", null, 10,
                 It.IsAny<CancellationToken>()), Times.Once);
@@ -577,9 +577,9 @@ public class TemplateServiceTests
         await svc.SyncAllAsync();
 
         Assert.Equal("Exists/Exists/-", Shape(synced, Mock));
-        Assert.Equal("NotCreated/Exists/Syncing", Shape(synced, Eude));
+        Assert.Equal("NotCreated/Exists/Syncing", Shape(synced, Singapore));
         Assert.Equal("NotCreated/Exists/Syncing", Shape(fresh, Mock));
-        Assert.Equal("NotCreated/Exists/Syncing", Shape(fresh, Eude));
+        Assert.Equal("NotCreated/Exists/Syncing", Shape(fresh, Singapore));
     }
 
     // The repeat (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/intent-and-observation.md#domain-refuses-a-repeat): a second press while a sync
@@ -617,7 +617,7 @@ public class TemplateServiceTests
         var a = VmTemplate.Create("a", null, "img", 10, TierS);
         var b = VmTemplate.Create("b", null, "img", 10, TierS);
         var (svc, _, wf) = Make(a, b);
-        wf.Setup(w => w.EnqueueTemplateSyncAsync(a.Id, Eude, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+        wf.Setup(w => w.EnqueueTemplateSyncAsync(a.Id, Singapore, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<string?>(), It.IsAny<int?>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException("command queue unavailable"));
 

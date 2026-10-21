@@ -15,7 +15,7 @@ public class AdminClusterServiceTests
 
     private static readonly ZoneOptions Zones = new()
     {
-        Zones = [new ZoneConfig { Id = "mock", Name = "mock" }, new ZoneConfig { Id = "eude01", Name = "eude01" }],
+        Zones = [new ZoneConfig { Id = "singapore01", Name = "singapore01" }, new ZoneConfig { Id = "mock", Name = "mock" }],
     };
 
     private static (AdminClusterService Service, StubClusterRepository Rows) Build()
@@ -31,7 +31,7 @@ public class AdminClusterServiceTests
 
         var list = await service.ListForAdminAsync(CancellationToken.None);
 
-        Assert.Equal(["mock", "eude01"], list.Select(c => c.ZoneId).ToList());
+        Assert.Equal(["singapore01", "mock"], list.Select(c => c.ZoneId).ToList());
         Assert.All(list, c => Assert.Equal("none", c.Source));
         Assert.All(list, c => Assert.Equal("", c.Endpoint));
         Assert.All(list, c => Assert.Null(c.Id));
@@ -50,7 +50,7 @@ public class AdminClusterServiceTests
         Assert.Equal("incus-lab", mock.Name);
         Assert.Equal("https://incus-lab:8443", mock.Endpoint);
         Assert.Equal(Fingerprint, mock.ServerFingerprint);
-        Assert.Equal("none", list.Single(c => c.ZoneId == "eude01").Source);
+        Assert.Equal("none", list.Single(c => c.ZoneId == "singapore01").Source);
     }
 
     [Fact]

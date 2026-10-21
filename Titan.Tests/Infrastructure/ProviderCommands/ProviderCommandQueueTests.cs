@@ -319,11 +319,11 @@ public class ProviderCommandQueueTests
         Guid templateId = Guid.NewGuid();
         ProviderCommandQueue queue = Queue();
 
+        await queue.EnqueueTemplateSyncAsync(templateId, "singapore01", "Alma-9-DB", null, "almalinux/9", null, 40);
         await queue.EnqueueTemplateSyncAsync(templateId, "mock", "Alma-9-DB", null, "almalinux/9", null, 40);
-        await queue.EnqueueTemplateSyncAsync(templateId, "eude01", "Alma-9-DB", null, "almalinux/9", null, 40);
 
         Assert.Equal(
-            new[] { $"template-sync-{templateId}-mock", $"template-sync-{templateId}-eude01" },
+            new[] { $"template-sync-{templateId}-singapore01", $"template-sync-{templateId}-mock" },
             _repo.Rows.Select(r => r.Key).ToArray());
     }
 

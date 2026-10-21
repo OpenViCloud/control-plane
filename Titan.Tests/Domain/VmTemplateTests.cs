@@ -10,7 +10,7 @@ namespace Titan.Tests.Domain;
 public class VmTemplateTests
 {
     private const string Mock = "mock";
-    private const string Eude = "eude01";
+    private const string Singapore = "singapore01";
 
     private static string Shape(VmTemplate t, string zoneId)
     {
@@ -84,10 +84,10 @@ public class VmTemplateTests
     {
         var t = SyncedIn(Mock, "tpl-a");
 
-        t.RequestSyncIn(Eude);
+        t.RequestSyncIn(Singapore);
 
         Assert.Equal("Exists/Exists/-", Shape(t, Mock));
-        Assert.Equal("NotCreated/Exists/Syncing", Shape(t, Eude));
+        Assert.Equal("NotCreated/Exists/Syncing", Shape(t, Singapore));
     }
 
     [Fact] // a sync that gave up can be asked again; what was observed stays until the worker says otherwise
@@ -179,13 +179,13 @@ public class VmTemplateTests
     {
         var t = NewTemplate();
         t.RequestSyncIn(Mock);
-        t.RequestSyncIn(Eude);
+        t.RequestSyncIn(Singapore);
 
         t.MarkCreatedIn(Mock, "tpl-a");
-        t.MarkCreatedIn(Eude, "tpl-b");
+        t.MarkCreatedIn(Singapore, "tpl-b");
 
         Assert.Equal("tpl-a", t.ProviderIdIn(Mock));
-        Assert.Equal("tpl-b", t.ProviderIdIn(Eude));
+        Assert.Equal("tpl-b", t.ProviderIdIn(Singapore));
     }
 
     [Fact]
@@ -203,10 +203,10 @@ public class VmTemplateTests
     {
         var t = NewTemplate();
 
-        t.MarkCreatedIn(Eude, "tpl-b");
+        t.MarkCreatedIn(Singapore, "tpl-b");
 
-        Assert.Equal("Exists/Exists/-", Shape(t, Eude));
-        Assert.Equal("tpl-b", t.ProviderIdIn(Eude));
+        Assert.Equal("Exists/Exists/-", Shape(t, Singapore));
+        Assert.Equal("tpl-b", t.ProviderIdIn(Singapore));
     }
 
     [Fact] // the sync gave up: nothing waits any more; existence stays what was last observed
@@ -241,14 +241,14 @@ public class VmTemplateTests
     public void MarkNotFoundIn_OnAZoneThatHadIt_KeepsItsProviderId_AndTheOtherZone()
     {
         var t = SyncedIn(Mock, "tpl-a");
-        t.RequestSyncIn(Eude);
-        t.MarkCreatedIn(Eude, "tpl-b");
+        t.RequestSyncIn(Singapore);
+        t.MarkCreatedIn(Singapore, "tpl-b");
 
         t.MarkNotFoundIn(Mock);
 
         Assert.Equal("NotFound/Exists/-", Shape(t, Mock));
         Assert.Equal("tpl-a", t.ZoneOrNull(Mock)!.ExternalTemplateId);
-        Assert.Equal("Exists/Exists/-", Shape(t, Eude));
+        Assert.Equal("Exists/Exists/-", Shape(t, Singapore));
     }
 
     [Fact] // a missing alias does not erase why the last sync failed (the architecture reason stays readable)
@@ -318,9 +318,9 @@ public class VmTemplateTests
     public void ProviderIdIn_AZoneNotCreated_IsRefused_AsNotSynced()
     {
         var t = SyncedIn(Mock, "tpl-a");
-        t.RequestSyncIn(Eude);
+        t.RequestSyncIn(Singapore);
 
-        Assert.Equal("TEMPLATE_NOT_SYNCED", Assert.Throws<BusinessException>(() => t.ProviderIdIn(Eude)).Code);
+        Assert.Equal("TEMPLATE_NOT_SYNCED", Assert.Throws<BusinessException>(() => t.ProviderIdIn(Singapore)).Code);
         Assert.Equal("TEMPLATE_NOT_SYNCED", Assert.Throws<BusinessException>(() => t.ProviderIdIn("never-asked")).Code);
     }
 
@@ -337,12 +337,12 @@ public class VmTemplateTests
     public void IsSyncedIn_IsTrue_OnlyForAZoneWhoseClusterHasTheAlias()
     {
         var t = SyncedIn(Mock, "tpl-a");
-        t.RequestSyncIn(Eude);
+        t.RequestSyncIn(Singapore);
         var lost = SyncedIn(Mock, "tpl-a");
         lost.MarkNotFoundIn(Mock);
 
         Assert.True(t.IsSyncedIn(Mock));
-        Assert.False(t.IsSyncedIn(Eude));
+        Assert.False(t.IsSyncedIn(Singapore));
         Assert.False(t.IsSyncedIn("never-asked"));
         Assert.False(lost.IsSyncedIn(Mock));
     }

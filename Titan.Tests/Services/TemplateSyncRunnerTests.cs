@@ -12,11 +12,11 @@ namespace Titan.Tests.Services;
 // Counts per (template, zone) over the two configured zones (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
 public class TemplateSyncRunnerTests
 {
-    private const string Mock = "mock", Eude = "eude01";
+    private const string Mock = "mock", Singapore = "singapore01";
 
     private static readonly ZoneOptions Zones = new()
     {
-        Zones = [new ZoneConfig { Id = Mock, Name = "Mock" }, new ZoneConfig { Id = Eude, Name = "EU DE 01" }],
+        Zones = [new ZoneConfig { Id = Mock, Name = "Mock" }, new ZoneConfig { Id = Singapore, Name = "Singapore 01" }],
     };
 
     private readonly Mock<IVmTemplateRepository> _repo = new();
@@ -49,7 +49,7 @@ public class TemplateSyncRunnerTests
 
         await Runner().RunAsync(1, TimeSpan.Zero, CountingDelay(() => { }));
 
-        foreach (string zoneId in new[] { Mock, Eude })
+        foreach (string zoneId in new[] { Mock, Singapore })
         {
             _commands.Verify(w => w.EnqueueTemplateSyncAsync(t.Id, zoneId, "a", null, "img", null, 10,
                 It.IsAny<CancellationToken>()), Times.Once);
@@ -167,13 +167,13 @@ public class TemplateSyncRunnerTests
     private static Func<TimeSpan, CancellationToken, Task> CountingDelay(Action onDelay) =>
         (_, _) => { onDelay(); return Task.CompletedTask; };
 
-    // A template's sync in mock and in eude01: "none" (never asked) | "Waiting" | "Exists" | "Failed" |
+    // A template's sync in mock and in singapore01: "none" (never asked) | "Waiting" | "Exists" | "Failed" |
     // "Retrying" (failed, then asked again).
-    private static VmTemplate Template(string name, string inMock, string inEude)
+    private static VmTemplate Template(string name, string inMock, string inSingapore)
     {
         var t = VmTemplate.Create(name, null, "os-image", 10, "m");
         Put(t, Mock, inMock);
-        Put(t, Eude, inEude);
+        Put(t, Singapore, inSingapore);
         return t;
     }
 

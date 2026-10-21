@@ -59,14 +59,14 @@ public class TemplateReconcilerTests
     {
         using var db = NewDb();
         var synced = SyncedIn("synced", "mock", "205");
-        synced.RequestSyncIn("eude01");
-        synced.MarkCreatedIn("eude01", "3");
+        synced.RequestSyncIn("singapore01");
+        synced.MarkCreatedIn("singapore01", "3");
         var lost = SyncedIn("lost", "mock", "206");
         lost.MarkNotFoundIn("mock");
         var failedFirstSync = VmTemplate.Create("never", null, "img", 10, "m");
         failedFirstSync.RequestSyncIn("mock");
         failedFirstSync.MarkRequestFailedIn("mock", "image not found", null);
-        var otherZoneOnly = SyncedIn("eude-only", "eude01", "4");
+        var otherZoneOnly = SyncedIn("singapore-only", "singapore01", "4");
         db.VmTemplates.AddRange(synced, lost, failedFirstSync, otherZoneOnly, VmTemplate.Create("pending", null, "img", 10, "m"));
         await db.SaveChangesAsync();
         var heartbeat = new ReconcilerHeartbeat();
@@ -99,7 +99,7 @@ public class TemplateReconcilerTests
         var synced = SyncedIn("synced", "mock", "205");
         var lost = SyncedIn("lost", "mock", "206");
         lost.MarkNotFoundIn("mock");
-        db.VmTemplates.AddRange(synced, lost, SyncedIn("elsewhere", "eude01", "3"), VmTemplate.Create("pending", null, "img", 10, "m"));
+        db.VmTemplates.AddRange(synced, lost, SyncedIn("elsewhere", "singapore01", "3"), VmTemplate.Create("pending", null, "img", 10, "m"));
         await db.SaveChangesAsync();
 
         var names = (await new VmTemplateRepository(db).ListSyncedInZoneAsync("mock")).Select(t => t.Name).ToList();
@@ -119,13 +119,13 @@ public class TemplateReconcilerTests
         {
             var repo = new VmTemplateRepository(db);
             var tracked = (await repo.FindByIdAsync((await db.VmTemplates.SingleAsync()).Id))!;
-            tracked.RequestSyncIn("eude01");
+            tracked.RequestSyncIn("singapore01");
             await repo.SaveAsync();
         }
         using (var db = NewDb("zone-added"))
         {
             var reread = (await new VmTemplateRepository(db).ListAllAsync()).Single();
-            Assert.Equal(new[] { "eude01:NotCreated", "mock:Exists" },
+            Assert.Equal(new[] { "mock:Exists", "singapore01:NotCreated" },
                 reread.Zones.OrderBy(z => z.ZoneId).Select(z => $"{z.ZoneId}:{z.CurrentExistence}"));
         }
     }
