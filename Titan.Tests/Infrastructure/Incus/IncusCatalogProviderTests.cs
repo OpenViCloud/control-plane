@@ -91,9 +91,9 @@ public class IncusCatalogProviderTests
     [Fact]
     public async Task OsImages_AreTheVirtualMachineImages_OfTheFirstZone()
     {
-        var (catalog, rows, titan) = await Catalog("mock", "eude01");
+        var (catalog, rows, titan) = await Catalog("singapore01", "mock");
         await using var server = await FakeIncusServer.StartAsync(titan);
-        rows.Rows.Add(ClusterAggregate.Create("mock", null, server.Endpoint, server.Fingerprint));
+        rows.Rows.Add(ClusterAggregate.Create("singapore01", null, server.Endpoint, server.Fingerprint));
 
         var images = await catalog.ListOsImagesAsync();
 
