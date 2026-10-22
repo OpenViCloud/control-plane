@@ -110,8 +110,7 @@ jobs:
 
   # Built on every run beside the tests, its layers kept in the Actions cache. Pushed only from main, once the tests
   # passed, by the push job reading those layers back, tagged with the commit's first 7 characters. The source label
-  # links the package to this repository. The old name control-plane keeps dev's scripts/pull-images.py working until
-  # dev reads titan-control-plane. Which tag an environment runs is decided outside this repository: dev by
+  # links the package to this repository. Which tag an environment runs is decided outside this repository: dev by
   # scripts/pull-images.py of OpenViCloud/titan-local-cluster, staging by a release of OpenViCloud/titan-ops. This
   # repository holds no credential for either (https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/platform-infra.md#gitops-flow).
   image:
@@ -161,8 +160,6 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: |
-            ghcr.io/openvicloud/titan-control-plane:${{ env.SHORT_SHA }}
-            ghcr.io/openvicloud/control-plane:${{ env.SHORT_SHA }}
+          tags: ghcr.io/openvicloud/titan-control-plane:${{ env.SHORT_SHA }}
           labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
           cache-from: type=gha,scope=titan-control-plane
