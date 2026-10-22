@@ -1,6 +1,6 @@
 namespace Titan.Tests.Infrastructure.Incus;
 
-// What Incus 7.0.1 answered in the lab (testdata/, copied from incus/provider/testdata/ of OpenViCloud/incus-worker):
+// What Incus 7.0.1 answered in the lab (testdata/, copied from incus/provider/testdata/ of OpenViCloud/titan-incus-worker):
 // the oracle the fake server replays, so the client is tested against real bodies, not against what we think Incus says.
 internal static class IncusLabRecording
 {

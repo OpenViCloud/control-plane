@@ -104,7 +104,7 @@ public class TenantResolutionMiddlewareTests
         VerifyBootstrapped(t => OwnedBy(t, "user-1") && t.Name == "alice" && t.Email == "alice@example.com");
     }
 
-    // https://github.com/OpenViCloud/titan/blob/main/docs/architecture/tenancy-and-admin.md#approval-is-activation: a verified first login is created pending and
+    // https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/tenancy-and-admin.md#approval-is-activation: a verified first login is created pending and
     // approved in the same request, wallet first — the request already sees an Active tenant with a wallet.
     [Fact]
     public async Task FirstLogin_VerifiedEmail_EndsActive_WithAWallet_OpenedBeforeTheApproval()
@@ -220,7 +220,7 @@ public class TenantResolutionMiddlewareTests
     }
 
     // Opening a shell session is a GET upgrade, but it acts inside the VM: a suspended or unapproved tenant may not
-    // open one (https://github.com/OpenViCloud/titan/blob/main/docs/features/vm/design.md#ssh-session).
+    // open one (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/vm/design.md#ssh-session).
     [Theory]
     [InlineData(TenantStatus.Suspended, "TENANT_SUSPENDED")]
     [InlineData(TenantStatus.PendingApproval, "TENANT_PENDING_APPROVAL")]
@@ -243,7 +243,7 @@ public class TenantResolutionMiddlewareTests
     }
 
     // A refused upgrade answered with a chunked body reaches the CLI as the edge's 502, without the code
-    // (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/http-contract.md#error-envelope).
+    // (https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/http-contract.md#error-envelope).
     [Theory]
     [InlineData(TenantStatus.Suspended)]
     [InlineData(TenantStatus.PendingApproval)]

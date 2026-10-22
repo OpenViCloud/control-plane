@@ -4,7 +4,7 @@ using Titan.Infrastructure.Incus;
 
 namespace Titan.Tests.Infrastructure.Incus;
 
-// Titan's client identity toward Incus (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#provider-client-identity): generated
+// Titan's client identity toward Incus (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#provider-client-identity): generated
 // once by the control plane, then the same certificate forever — a new one would leave every cluster that trusts the
 // old one refusing Titan, with nothing pointing at the cause.
 public class ProviderClientIdentityStoreTests

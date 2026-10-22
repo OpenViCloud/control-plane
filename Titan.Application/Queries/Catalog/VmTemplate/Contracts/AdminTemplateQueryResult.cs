@@ -8,9 +8,9 @@ public record AdminTemplateQueryResult(
     string Name,
     string? Description,
     string Os,           // = OsImageName
-    string VmOfferingId, // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-borrows-sizing — the tier this template borrows its base sizing from
+    string VmOfferingId, // https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#template-borrows-sizing — the tier this template borrows its base sizing from
     int? DiskGb,         // = RootDiskSizeGb
-    bool Listed,         // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-listed — false ⇒ customers neither see nor pick it
+    bool Listed,         // https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#template-listed — false ⇒ customers neither see nor pick it
     List<AdminTemplateZoneQueryResult> Zones) // ordered by zone id
 {
     public static AdminTemplateQueryResult From(VmTemplateAggregate t) =>

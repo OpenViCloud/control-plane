@@ -3,7 +3,7 @@ using Titan.Domain.Aggregates.Platform.ProviderClientIdentity;
 
 namespace Titan.Tests.Domain;
 
-// Titan's own TLS client identity toward every Incus cluster (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#provider-client-identity).
+// Titan's own TLS client identity toward every Incus cluster (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#provider-client-identity).
 // One row with a fixed key: a second identity would leave every cluster that trusts the first one refusing Titan.
 public class ProviderClientIdentityTests
 {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Titan.Infrastructure.Incus;
 
 // Env var Encryption__ClusterKey: a base64-encoded 32-byte key for AES-256-GCM, validated on start so a
-// missing or mis-sized key fails fast (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
+// missing or mis-sized key fails fast (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
 public class ClusterEncryptionOptions
 {
     public const string SectionName = "Encryption";
@@ -11,7 +11,7 @@ public class ClusterEncryptionOptions
     [Required] public string ClusterKey { get; init; } = default!;
 
     // The key committed in appsettings.json for local runs: anyone with the repo decrypts what it encrypted, so only
-    // Development may start with it (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
+    // Development may start with it (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
     public const string DevelopmentPlaceholderKey = "dGl0YW4tcGxhY2Vob2xkZXItY2x1c3Rlci1rZXkhISE=";
 
     public static bool IsAllowedKey(string clusterKey, bool isDevelopment)

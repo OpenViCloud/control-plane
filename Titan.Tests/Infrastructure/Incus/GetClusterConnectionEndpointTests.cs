@@ -8,7 +8,7 @@ using ClusterAggregate = Titan.Domain.Aggregates.Platform.Cluster.Cluster;
 
 namespace Titan.Tests.Infrastructure.Incus;
 
-// https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#worker-cluster-connection — the one route that hands Titan's private key out. It
+// https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#worker-cluster-connection — the one route that hands Titan's private key out. It
 // composes the zone's cluster with the client identity, so it carries its own logic and gets its own test.
 public class GetClusterConnectionEndpointTests
 {

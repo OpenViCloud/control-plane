@@ -6,7 +6,7 @@ using Titan.Tests.Infrastructure.Incus;
 
 namespace Titan.Tests.Services;
 
-// An Incus cluster row holds nothing secret (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-incus). The rules with
+// An Incus cluster row holds nothing secret (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-incus). The rules with
 // weight: every configured zone shows, registered or not, so the admin sees where to register; a row whose zone left
 // the config still shows; there is no config fallback any more.
 public class AdminClusterServiceTests
