@@ -4,7 +4,7 @@ using Titan.Infrastructure.Incus;
 namespace Titan.Tests.Infrastructure;
 
 // The committed placeholder key decrypts anything it encrypted for whoever has the repo, so a process outside
-// Development must refuse to start with it (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
+// Development must refuse to start with it (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-password-write-only).
 public class ClusterEncryptionOptionsTests
 {
     private const string AnotherKey = "c3RhZ2luZy1yZWFsLWtleS0wMTIzNDU2Nzg5YWJjZGU=";

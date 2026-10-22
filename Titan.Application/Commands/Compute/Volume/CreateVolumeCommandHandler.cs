@@ -26,7 +26,7 @@ public class CreateVolumeCommandHandler(
         var tenant = await tenantRepo.FindByIdAsync(callerId, ct)
             ?? throw new NotFoundException("TENANT_NOT_FOUND", "Tenant not found.");
 
-        // A volume without a price on file would stop the disk meter (https://github.com/OpenViCloud/titan/blob/main/docs/features/volume/design.md#offering-must-exist).
+        // A volume without a price on file would stop the disk meter (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/volume/design.md#offering-must-exist).
         var offering = await offeringRepo.FindByIdAsync(req.VolumeOfferingId, ct);
         if (offering == null)
         {
@@ -38,7 +38,7 @@ public class CreateVolumeCommandHandler(
 
         // Quota refuses inside the factory — see CreateVmCommandHandler.
         var volume = VolumeAggregate.Create(tenant, activeVolumeCount, req.Name, req.ZoneId, req.VolumeOfferingId, req.SizeGb);
-        zones.Require(volume.ZoneId); // https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#zone-is-a-real-choice
+        zones.Require(volume.ZoneId); // https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#zone-is-a-real-choice
         repo.Add(volume);
         activity.Stage("volume.create_requested", "volume", volume.Id, volume.Name); // atomic with the volume insert
         string projectName = TenantAggregate.ProjectNameFor(volume.TenantId);

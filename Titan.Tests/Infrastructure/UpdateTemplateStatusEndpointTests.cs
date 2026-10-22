@@ -54,7 +54,7 @@ public class UpdateTemplateStatusEndpointTests
     }
 
     // A worker older than per-zone templates reports no zone: whose alias it is cannot be told, so nothing is
-    // recorded (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
+    // recorded (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#template-per-zone).
     [Fact]
     public async Task HandleAsync_WithoutAZone_Returns400_AndNeverTouchesTheTemplate()
     {

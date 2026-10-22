@@ -48,7 +48,7 @@ public class ClusterSchemaTests
         Assert.Equal("server_fingerprint", property.GetColumnName());
     }
 
-    // Null is "not set" (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
+    // Null is "not set" (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
     [Fact]
     public void ProviderSettings_AreColumnsOfThisTable_AndAllNullable()
     {

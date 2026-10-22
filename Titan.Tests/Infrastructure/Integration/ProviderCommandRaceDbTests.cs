@@ -15,14 +15,14 @@ using Titan.Infrastructure.Repositories;
 namespace Titan.Tests.Infrastructure.Integration;
 
 /// Two identical requests at once where the first commits before the second reads the command key
-/// (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/provider-and-worker.md#provider-command-key). The second read the resource before that commit, so
+/// (https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/provider-and-worker.md#provider-command-key). The second read the resource before that commit, so
 /// it took the request as new; the open row it then finds is the other request's work. Category=Integration — its own
-/// CI step; needs real Postgres; no doubles (https://github.com/OpenViCloud/titan/blob/main/docs/architecture/testing.md#doubles-only-in-unit-tests).
+/// CI step; needs real Postgres; no doubles (https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/testing.md#doubles-only-in-unit-tests).
 [Trait("Category", "Integration")]
 [Collection(PostgresCollection.Name)]
 public class ProviderCommandRaceDbTests(PostgresFixture pg)
 {
-    // CC-01 of https://github.com/OpenViCloud/titan/blob/main/regression/plan.md: the second of two deletes answered 202 and recorded a second vm.delete_requested.
+    // CC-01 of https://github.com/OpenViCloud/titan-regression/blob/main/plan.md: the second of two deletes answered 202 and recorded a second vm.delete_requested.
     [Fact]
     public async Task ANewDelete_FindingTheOpenCommandOfAnotherRequest_Is409_AndRecordsNothing()
     {

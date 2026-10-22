@@ -6,7 +6,7 @@ using ClusterAggregate = Titan.Domain.Aggregates.Platform.Cluster.Cluster;
 
 namespace Titan.Tests.Infrastructure.Incus;
 
-// Opening an SSH session's exec on the zone's Incus over mutual TLS (https://github.com/OpenViCloud/titan/blob/main/docs/features/vm/design.md#ssh-session): the
+// Opening an SSH session's exec on the zone's Incus over mutual TLS (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/vm/design.md#ssh-session): the
 // same client certificate and pinned server fingerprint as every other call, then the four websockets of the
 // operation. Each Incus refusal becomes the code the customer can act on.
 public class IncusExecSessionTests

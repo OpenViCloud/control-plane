@@ -7,7 +7,7 @@ using ClusterAggregate = Titan.Domain.Aggregates.Platform.Cluster.Cluster;
 
 namespace Titan.Infrastructure.Endpoints.Internal;
 
-// The worker's way to a zone's Incus cluster (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#worker-cluster-connection): endpoint,
+// The worker's way to a zone's Incus cluster (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#worker-cluster-connection): endpoint,
 // the server fingerprint to pin, Titan's client certificate WITH its private key, and the zone's provider settings. Behind X-Internal-Token only;
 // the body is never logged.
 public class GetClusterConnectionEndpoint(
@@ -49,6 +49,6 @@ public record ClusterConnectionResponse(
     string ServerFingerprint,
     string ClientCertificatePem,
     string ClientKeyPem,
-    // The zone's provider settings (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings); null = not set.
+    // The zone's provider settings (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-provider-settings); null = not set.
     string? OvnUplinkNetwork,
     string? StoragePool);

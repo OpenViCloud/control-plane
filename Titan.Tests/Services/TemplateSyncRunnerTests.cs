@@ -9,7 +9,7 @@ using Titan.Domain.Repositories.Catalog;
 
 namespace Titan.Tests.Services;
 
-// Counts per (template, zone) over the two configured zones (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
+// Counts per (template, zone) over the two configured zones (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#template-per-zone).
 public class TemplateSyncRunnerTests
 {
     private const string Mock = "mock", Singapore = "singapore01";
@@ -21,7 +21,7 @@ public class TemplateSyncRunnerTests
 
     private readonly Mock<IVmTemplateRepository> _repo = new();
 
-    // The runner injects SyncTemplatesCommandHandler (concrete, no interface — https://github.com/OpenViCloud/titan/blob/main/docs/architecture/code-structure.md#no-mediatr), so
+    // The runner injects SyncTemplatesCommandHandler (concrete, no interface — https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/code-structure.md#no-mediatr), so
     // the enqueue step runs for real. It reads templates through its OWN repository mock: sharing
     // _repo would let the enqueue consume the first value of a poll sequence set up below, and the
     // tests here are about polling. The enqueue itself is pinned in TemplateServiceTests.

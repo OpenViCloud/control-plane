@@ -5,7 +5,7 @@ using Titan.Domain.Aggregates.Platform.Cluster;
 
 namespace Titan.Infrastructure.Endpoints.Admin;
 
-// Every field nullable: null = not set (https://github.com/OpenViCloud/titan/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
+// Every field nullable: null = not set (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/cluster/design.md#cluster-provider-settings).
 public record SetClusterProviderSettingsRequest(string? OvnUplinkNetwork, string? StoragePool, string? Ipv6Block);
 
 // Its own route, not a field of the connection PUT: the admin page saves the connection without these, and an

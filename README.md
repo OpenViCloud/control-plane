@@ -1,9 +1,9 @@
-# control-plane — OpenViCloud's API
+# titan-control-plane — OpenViCloud's API
 
-`control-plane` is the part of [OpenViCloud](https://github.com/OpenViCloud/titan) that customers and the portals talk
+`titan-control-plane` is the part of [OpenViCloud](https://github.com/OpenViCloud) that customers and the portals talk
 to. It owns identity, tenancy, quota, billing and the wallet, and it records what each customer asked for. On Incus it
 only reads, and relays SSH sessions. It writes provider commands to a table, and
-[incus-worker](https://github.com/OpenViCloud/incus-worker) leases them over the `/internal` API, carries them out and
+[titan-incus-worker](https://github.com/OpenViCloud/titan-incus-worker) leases them over the `/internal` API, carries them out and
 reports back what Incus shows.
 
 The public API is `/v1`. Its contract is [`api/openapi-v1.json`](api/openapi-v1.json): a test renders the spec from
@@ -36,9 +36,9 @@ Clean Architecture, one assembly per layer:
 
 ## Docs
 
-Design docs and the rules this code follows live in the titan repository:
-[docs/architecture](https://github.com/OpenViCloud/titan/tree/main/docs/architecture) and
-[docs/features](https://github.com/OpenViCloud/titan/tree/main/docs/features).
+Design docs and the rules this code follows live in the titan-ops repository:
+[docs/architecture](https://github.com/OpenViCloud/titan-ops/tree/main/docs/architecture) and
+[docs/features](https://github.com/OpenViCloud/titan-ops/tree/main/docs/features).
 
 ## License
 

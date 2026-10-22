@@ -6,7 +6,7 @@ using Titan.Infrastructure.Hosting;
 
 namespace Titan.Infrastructure.Endpoints.Internal;
 
-// One template reconciler per zone (https://github.com/OpenViCloud/titan/blob/main/docs/features/catalog/design.md#template-per-zone).
+// One template reconciler per zone (https://github.com/OpenViCloud/titan-ops/blob/main/docs/features/catalog/design.md#template-per-zone).
 public class ListReconcilableTemplatesEndpoint(
     ListReconcilableTemplatesQueryHandler handler,
     ReconcilerHeartbeat heartbeat,
