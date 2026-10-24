@@ -392,6 +392,15 @@ builder.Services.AddAuthentication(ApiTokenSchemes.Selector)
     options.Authority = builder.Configuration["Keycloak:Authority"];
     options.Audience = builder.Configuration["Keycloak:Audience"];
     options.MapInboundClaims = false; // preserve raw JWT claim names (e.g. "email", "sub")
+    // Discovery and JWKS from Keycloak's in-cluster Service; tokens still carry the public issuer
+    // (https://github.com/OpenViCloud/titan-ops/blob/main/docs/architecture/platform-infra.md#keycloak-metadata).
+    string? metadataAddress = builder.Configuration["Keycloak:MetadataAddress"];
+    if (!string.IsNullOrEmpty(metadataAddress))
+    {
+        options.MetadataAddress = metadataAddress;
+        options.RequireHttpsMetadata = new Uri(metadataAddress).Scheme == Uri.UriSchemeHttps;
+        options.TokenValidationParameters.ValidIssuer = options.Authority;
+    }
 });
 
 // Keycloak realm roles live in a nested realm_access.roles claim — project them into
